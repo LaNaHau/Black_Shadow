@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "407635338178",
+    "project_id": "sansan-30297",
+    "storage_bucket": "sansan-30297.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407635338178:android:24040bb7e23d810a972c5b",
+        "android_client_info": {
+          "package_name": "com.example.appfood"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvcjgk_hQ-K5E9ICGLGSSqMHL13mmxSog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
