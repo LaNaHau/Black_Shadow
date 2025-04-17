@@ -48,8 +48,8 @@ public class MainActivity extends BaseActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot a : snapshot.getChildren()){
+                if (snapshot.exists()) {
+                    for (DataSnapshot a : snapshot.getChildren()) {
                         list.add(a.getValue(SliderItem.class));
                     }
                     banner(list);
@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void banner(ArrayList<SliderItem> list){
+    private void banner(ArrayList<SliderItem> list) {
         binding.viewPager2.setAdapter(new SliderViewHolderAdapter(binding.viewPager2, list));
         binding.viewPager2.setClipChildren(false);
         binding.viewPager2.setClipToPadding(false);
@@ -91,6 +91,10 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
+            if (item == R.id.favourites) {
+                startActivity(new Intent(MainActivity.this, FavouriteActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
 
         });
     }
@@ -104,11 +108,11 @@ public class MainActivity extends BaseActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot a : snapshot.getChildren()){
+                if (snapshot.exists()) {
+                    for (DataSnapshot a : snapshot.getChildren()) {
                         list.add(a.getValue(Category.class));
                     }
-                    if (list.size()>0){
+                    if (list.size() > 0) {
                         binding.cartgoryView.setLayoutManager(new GridLayoutManager(MainActivity.this, 3));
                         binding.cartgoryView.setAdapter(new CategoryAdapter(list));
                     }
