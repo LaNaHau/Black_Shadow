@@ -27,11 +27,13 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/circles"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout4"
                         android:layout_width="match_parent"
                         android:layout_height="360dp"
                         android:background="@drawable/top_background"
@@ -45,11 +47,11 @@
                         android:id="@+id/imageView5"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="48dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:srcCompat="@drawable/img_1" />
+                        app:srcCompat="@drawable/img_1" />
 
                     <TextView
                         android:id="@+id/nameTxt"
@@ -77,18 +79,8 @@
                         app:layout_constraintStart_toStartOf="@+id/nameTxt"
                         app:layout_constraintTop_toBottomOf="@+id/nameTxt" />
 
-                    <ImageView
-                        android:id="@+id/imageView8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/circles" />
-
                     <LinearLayout
+                        android:id="@+id/linearLayout2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
@@ -174,6 +166,13 @@
                                         app:srcCompat="@drawable/settings" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                                <ImageView
+                                    android:id="@+id/imageView8"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:scaleType="centerCrop"
+                                    app:srcCompat="@drawable/circles" />
+
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -186,6 +185,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/logoutBtn"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="10dp"
@@ -276,7 +276,7 @@
                                 android:textSize="16sp" />
 
                             <TextView
-                                android:id="@+id/mobileBtn"
+                                android:id="@+id/mobileTxt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -308,7 +308,7 @@
                                 android:textSize="16sp" />
 
                             <TextView
-                                android:id="@+id/tellBtn"
+                                android:id="@+id/tellTxt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -340,7 +340,7 @@
                                 android:textSize="16sp" />
 
                             <TextView
-                                android:id="@+id/addressBtn"
+                                android:id="@+id/addressTxt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -372,7 +372,7 @@
                                 android:textSize="16sp" />
 
                             <TextView
-                                android:id="@+id/contactBtn"
+                                android:id="@+id/contactTxt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"

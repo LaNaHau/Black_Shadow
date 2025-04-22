@@ -7,6 +7,7 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -14,6 +15,7 @@ public class BaseActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth mAuth;
     DatabaseReference databaseReference;
+
 
 
     @Override

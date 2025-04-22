@@ -3,8 +3,28 @@ package com.example.appfood.Domain;
 public class User {
     private String UserName;
     private String FullName;
-    private String Password;
+    private String userId;
     private String Email;
+
+    public String getPhone() {
+        return Phone;
+    }
+
+    public void setPhone(String phone) {
+        Phone = phone;
+    }
+
+    public User(String userName, String fullName, String userId, String email, String phone) {
+        UserName = userName;
+        FullName = fullName;
+        userId = userId;
+        Email = email;
+        Phone = phone;
+    }
+
+    private String Phone;
+
+
 
     public String getUserName() {
         return UserName;
@@ -22,12 +42,12 @@ public class User {
         FullName = fullName;
     }
 
-    public String getPassword() {
-        return Password;
+    public String getuserId() {
+        return userId;
     }
 
-    public void setPassword(String password) {
-        Password = password;
+    public void setuserId(String userId) {
+        userId = userId;
     }
 
     public String getEmail() {
@@ -41,10 +61,10 @@ public class User {
     public User() {
     }
 
-    public User(String userName, String fullName, String password, String email) {
+    public User(String userName, String fullName, String userId, String email) {
         UserName = userName;
         FullName = fullName;
-        Password = password;
+        userId = userId;
         Email = email;
     }
 }

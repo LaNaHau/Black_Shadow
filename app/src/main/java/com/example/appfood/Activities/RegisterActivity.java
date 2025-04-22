@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.appfood.Domain.User;
 import com.example.appfood.Utils.SystemUtils;
 import com.example.appfood.Utils.Utils;
 import com.example.appfood.databinding.ActivityRegisterBinding;
@@ -76,19 +77,12 @@ public class RegisterActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Lấy user ID
                             String userId = mAuth.getCurrentUser().getUid();
-
-                            // Tạo đối tượng người dùng
-                            HashMap<String, Object> userMap = new HashMap<>();
-                            userMap.put("fullName", fullName);
-                            userMap.put("userName", userName);
-                            userMap.put("email", email);
-                            userMap.put("phone", phone);
-                            userMap.put("uid", userId);
+                            User user = new User(userName,fullName,userId,email,phone);
 
                             // Ghi vào Realtime Database
-                            FirebaseDatabase.getInstance().getReference("Users")
+                           firebaseDatabase.getReference("Users")
                                     .child(userId)
-                                    .setValue(userMap)
+                                    .setValue(user)
                                     .addOnCompleteListener(saveTask -> {
                                         if (saveTask.isSuccessful()) {
                                             Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show();

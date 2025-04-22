@@ -14,7 +14,7 @@ public class IntroActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         binding.goBtn.setOnClickListener(v ->{
-            startActivity(new Intent(IntroActivity.this, ProfileActivity.class));
+            startActivity(new Intent(IntroActivity.this, LoginActivity.class));
         });
 
     }
