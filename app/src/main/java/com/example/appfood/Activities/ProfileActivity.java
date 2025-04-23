@@ -31,11 +31,11 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void loadUserInfo() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) {
             String userId = currentUser.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            DatabaseReference userRef = firebaseDatabase.getReference("Users").child(userId);
 
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
