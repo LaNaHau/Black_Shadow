@@ -132,6 +132,15 @@ public class MainActivity extends BaseActivity {
             }
 
         });
+
+        binding.searchTxt.setOnClickListener(v -> {
+            String keyword = binding.searchTxt.getText().toString().trim();
+            if (!keyword.isEmpty()) {
+                Intent intent = new Intent(MainActivity.this, ListFoodActivity.class);
+                intent.putExtra("searchKeyword", keyword);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -147,7 +156,7 @@ public class MainActivity extends BaseActivity {
                     for (DataSnapshot a : snapshot.getChildren()) {
                         list.add(a.getValue(Category.class));
                     }
-                    if (list.size() > 0) {
+                    if (!list.isEmpty()) {
                         binding.cartgoryView.setLayoutManager(new GridLayoutManager(MainActivity.this, 3));
                         binding.cartgoryView.setAdapter(new CategoryAdapter(list));
                     }
@@ -163,4 +172,6 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+
 }

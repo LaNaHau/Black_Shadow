@@ -38,7 +38,7 @@ public class ManagmentCart {
     }
 
     public ArrayList<Foods> getListCart() {
-        return tinyDB.getListObject("CartList");
+        return tinyDB.getListObject("CartList",Foods.class);
     }
 
     public Double getTotalFee() {

@@ -85,8 +85,10 @@ public class RegisterActivity extends BaseActivity {
                                     .setValue(user)
                                     .addOnCompleteListener(saveTask -> {
                                         if (saveTask.isSuccessful()) {
-                                            Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                            Toast.makeText(this, "Sign up successful!",
+                                                    Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(RegisterActivity.this,
+                                                    LoginActivity.class));
                                             finish();
                                         } else {
                                             Toast.makeText(this, "Failed to save user data: " + saveTask.getException().getMessage(), Toast.LENGTH_SHORT).show();

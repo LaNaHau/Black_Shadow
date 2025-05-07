@@ -307,19 +307,17 @@ public class TinyDB {
     }
 
 
-    public ArrayList<Foods> getListObject(String key){
+    public <T> ArrayList<T> getListObject(String key, Class<T> classOfT) {
         Gson gson = new Gson();
-
         ArrayList<String> objStrings = getListString(key);
-        ArrayList<Foods> playerList =  new ArrayList<Foods>();
+        ArrayList<T> objList = new ArrayList<>();
 
-        for(String jObjString : objStrings){
-            Foods player  = gson.fromJson(jObjString,  Foods.class);
-            playerList.add(player);
+        for (String json : objStrings) {
+            objList.add(gson.fromJson(json, classOfT));
         }
-        return playerList;
-    }
 
+        return objList;
+    }
 
 
     public <T> T getObject(String key, Class<T> classOfT){
