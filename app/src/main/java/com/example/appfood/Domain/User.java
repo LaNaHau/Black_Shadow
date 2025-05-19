@@ -5,6 +5,7 @@ public class User {
     private String FullName;
     private String userId;
     private String Email;
+    private String address;
 
     public String getPhone() {
         return Phone;
@@ -20,6 +21,23 @@ public class User {
         userId = userId;
         Email = email;
         Phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public User(String phone, String address, String email, String userId, String fullName, String userName) {
+        Phone = phone;
+        this.address = address;
+        Email = email;
+        this.userId = userId;
+        FullName = fullName;
+        UserName = userName;
     }
 
     private String Phone;
