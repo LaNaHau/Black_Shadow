@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,14 +13,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appfood.Activities.AddAddressActivity;
 import com.example.appfood.Domain.Address;
 import com.example.appfood.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
-    private List<Address> addressList;
-    public AddressAdapter(List<Address> addressList) {
-        this.addressList = addressList;
+    public interface OnAddressSelectedListener {
+        void onAddressSelected(Address selectedAddress);
     }
+
+    private List<Address> addressList;
+    private OnAddressSelectedListener listener;
+
+    public AddressAdapter(List<Address> addressList, OnAddressSelectedListener listener) {
+        this.addressList = addressList;
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public AddressAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,11 +46,29 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         holder.tvFullAddress.setText(address.getFullAddress());
         holder.tvDefaultLabel.setVisibility(address.isDefault() ? View.VISIBLE : View.GONE);
 
-        // Nhấn để sửa địa chỉ
         holder.tvEdit.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), AddAddressActivity.class);
-            intent.putExtra("address", address);  // Đảm bảo Address implements Serializable
+            intent.putExtra("address", address);  // Address cần implements Serializable
             v.getContext().startActivity(intent);
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("addresses").child(userId);
+
+            // Xóa mặc định cũ
+            for (Address add : addressList) {
+                ref.child(add.getId()).child("default").setValue(false);
+            }
+
+            // Cập nhật mặc định mới
+            ref.child(address.getId()).child("default").setValue(true);
+
+            if (listener != null) {
+                listener.onAddressSelected(address);
+            }
+
+            Toast.makeText(v.getContext(), "Đã chọn địa chỉ làm mặc định", Toast.LENGTH_SHORT).show();
         });
     }
 

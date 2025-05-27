@@ -1,26 +1,65 @@
 package com.example.appfood.Domain;
 
 public class User {
-    private String UserName;
-    private String FullName;
+    private String userName;
+    private String fullName;
     private String userId;
-    private String Email;
+    private String email;
+    private String phone;
     private String address;
+    private String avatar;
 
-    public String getPhone() {
-        return Phone;
-    }
-
-    public void setPhone(String phone) {
-        Phone = phone;
+    public User() {
+        // Firebase requires empty constructor
     }
 
     public User(String userName, String fullName, String userId, String email, String phone) {
-        UserName = userName;
-        FullName = fullName;
-        userId = userId;
-        Email = email;
-        Phone = phone;
+        this.userName = userName;
+        this.fullName = fullName;
+        this.userId = userId;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    // Getter & Setter
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {
@@ -31,58 +70,11 @@ public class User {
         this.address = address;
     }
 
-    public User(String phone, String address, String email, String userId, String fullName, String userName) {
-        Phone = phone;
-        this.address = address;
-        Email = email;
-        this.userId = userId;
-        FullName = fullName;
-        UserName = userName;
+    public String getAvatar() {
+        return avatar;
     }
 
-    private String Phone;
-
-
-
-    public String getUserName() {
-        return UserName;
-    }
-
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
-
-    public String getFullName() {
-        return FullName;
-    }
-
-    public void setFullName(String fullName) {
-        FullName = fullName;
-    }
-
-    public String getuserId() {
-        return userId;
-    }
-
-    public void setuserId(String userId) {
-        userId = userId;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
-    }
-
-    public User() {
-    }
-
-    public User(String userName, String fullName, String userId, String email) {
-        UserName = userName;
-        FullName = fullName;
-        userId = userId;
-        Email = email;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

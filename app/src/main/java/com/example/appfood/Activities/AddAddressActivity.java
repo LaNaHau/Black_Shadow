@@ -3,23 +3,20 @@ package com.example.appfood.Activities;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.appfood.Domain.Address;
-import com.example.appfood.R;
 import com.example.appfood.databinding.ActivityAddAddressBinding;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class AddAddressActivity extends AppCompatActivity {
+public class AddAddressActivity extends BaseActivity {
 
     private ActivityAddAddressBinding binding;
-    private DatabaseReference databaseRef;
-    private String addressId = null; // nếu có thì sửa, không thì thêm mới
+    private DatabaseReference userAddressRef;
+    private String addressId = null;
+    private String userId = null;
+    private boolean isDefault = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +24,14 @@ public class AddAddressActivity extends AppCompatActivity {
         binding = ActivityAddAddressBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        databaseRef = FirebaseDatabase.getInstance().getReference("addresses");
+        userId = getIntent().getStringExtra("userId");
+        userAddressRef = firebaseDatabase.getReference("addresses").child(userId);
 
-        // Nếu nhận được intent sửa
+        // Nếu nhận được địa chỉ cần sửa
         Address address = (Address) getIntent().getSerializableExtra("address");
         if (address != null) {
-            addressId = address.getId(); // id dùng để cập nhật
+            addressId = address.getId();
+            isDefault = address.isDefault();
             binding.edtName.setText(address.getName());
             binding.edtPhone.setText(address.getPhone());
             binding.edtAddress.setText(address.getFullAddress());
@@ -49,17 +48,14 @@ public class AddAddressActivity extends AppCompatActivity {
             }
 
             if (addressId == null) {
-                // Thêm mới
-                String id = databaseRef.push().getKey();
-                Address newAddress = new Address(id, name, phone, fullAddress, false);
-                databaseRef.child(id).setValue(newAddress);
-            } else {
-                // Cập nhật
-                Address updated = new Address(addressId, name, phone, fullAddress, address.isDefault());
-                databaseRef.child(addressId).setValue(updated);
+                addressId = userAddressRef.push().getKey();
             }
 
-            finish(); // Quay lại
+            Address newAddress = new Address(addressId, name, phone, fullAddress, isDefault);
+            userAddressRef.child(addressId).setValue(newAddress);
+
+            Toast.makeText(this, "Lưu địa chỉ thành công", Toast.LENGTH_SHORT).show();
+            finish();
         });
     }
 }

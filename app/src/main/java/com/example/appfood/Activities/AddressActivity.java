@@ -2,18 +2,15 @@ package com.example.appfood.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appfood.Adapter.AddressAdapter;
 import com.example.appfood.Domain.Address;
-import com.example.appfood.R;
 import com.example.appfood.databinding.ActivityAddressBinding;
-import com.example.appfood.databinding.ActivityCartBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +24,7 @@ public class AddressActivity extends BaseActivity {
     private ActivityAddressBinding binding;
     private AddressAdapter adapter;
     private List<Address> addressList;
+    private DatabaseReference databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,36 +33,32 @@ public class AddressActivity extends BaseActivity {
         binding = ActivityAddressBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Khởi tạo danh sách và adapter
         addressList = new ArrayList<>();
-
-        // Thiết lập RecyclerView
-        adapter = new AddressAdapter(addressList);
+        AddressAdapter adapter = new AddressAdapter(addressList, selectedAddress -> {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("selected_address", selectedAddress);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        });
         binding.addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.addressRecyclerView.setAdapter(adapter);
 
-
         String userId = mAuth.getCurrentUser().getUid();
-        DatabaseReference addressRef = FirebaseDatabase.getInstance()
-                .getReference("addresses")
-                .child(userId);
-
-
-        // Nút thêm địa chỉ
-
+        databaseRef = FirebaseDatabase.getInstance().getReference("addresses").child(userId);
 
         // Lắng nghe thay đổi dữ liệu theo thời gian thực
-        addressRef.addValueEventListener(new ValueEventListener() {
+        databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 addressList.clear();
                 for (DataSnapshot data : snapshot.getChildren()) {
                     Address address = data.getValue(Address.class);
                     if (address != null) {
-                        address.setId(data.getKey()); // Lưu ID để chỉnh sửa
+                        address.setId(data.getKey());
                         addressList.add(address);
                     }
                 }
+                Log.d("DEBUG", "Tổng số địa chỉ load được: " + addressList.size());
                 adapter.notifyDataSetChanged();
             }
 
@@ -73,9 +67,12 @@ public class AddressActivity extends BaseActivity {
                 Toast.makeText(AddressActivity.this, "Lỗi tải địa chỉ", Toast.LENGTH_SHORT).show();
             }
         });
+
         // Mở màn hình thêm địa chỉ
         binding.btnAddAddress.setOnClickListener(v -> {
-            startActivity(new Intent(this, AddAddressActivity.class));
+            Intent intent = new Intent(this, AddAddressActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
         });
     }
 }

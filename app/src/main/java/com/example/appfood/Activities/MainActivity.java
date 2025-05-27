@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.appfood.Adapter.CategoryAdapter;
 import com.example.appfood.Adapter.SliderViewHolderAdapter;
 import com.example.appfood.Domain.Category;
@@ -56,8 +57,10 @@ public class MainActivity extends BaseActivity {
                     if (snapshot.exists()) {
                         User user = snapshot.getValue(User.class);
                         if (user != null) {
+                            String avatarUrl = snapshot.child("avatar").getValue(String.class);
                             binding.textView2.setText(user.getUserName());
-
+                            Glide.with(MainActivity.this)
+                                    .load(avatarUrl).into(binding.imageView6);
                         } else {
                             Toast.makeText(MainActivity.this, "Không tìm thấy dữ liệu người dùng", Toast.LENGTH_SHORT).show();
                         }

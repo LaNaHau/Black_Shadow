@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -56,21 +58,31 @@ public class ProfileActivity extends BaseActivity {
 
         if (currentUser != null) {
             String userId = currentUser.getUid();
-            DatabaseReference userRef = firebaseDatabase.getReference("Users").child(userId);
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         User user = snapshot.getValue(User.class);
+                        String avatarUrl = snapshot.child("avatar").getValue(String.class);
+
                         if (user != null) {
                             binding.nameTxt.setText(user.getUserName());
                             binding.emailTxt.setText(user.getEmail());
                             binding.tellTxt.setText(user.getPhone());
                             binding.mobileTxt.setText(user.getPhone());
+
+                            if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                                Glide.with(ProfileActivity.this)
+                                        .load(avatarUrl)
+                                        .into(binding.avaBtn);
+                            }
                         } else {
                             Toast.makeText(ProfileActivity.this, "Không tìm thấy dữ liệu người dùng", Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "Người dùng không tồn tại trong Database", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -82,6 +94,8 @@ public class ProfileActivity extends BaseActivity {
         } else {
             Toast.makeText(this, "Chưa đăng nhập", Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
 
@@ -90,7 +104,7 @@ public class ProfileActivity extends BaseActivity {
 
 
     private void setAvailable() {
-        binding.editProfileBtn.setOnClickListener(v ->{
+        binding.editProfileBtn.setOnClickListener(v -> {
 
         });
 
@@ -108,6 +122,7 @@ public class ProfileActivity extends BaseActivity {
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
+        binding.backBtn.setOnClickListener(v -> startActivity(new Intent(ProfileActivity.this, LoginActivity.class)));
 
     }
 
@@ -119,34 +134,44 @@ public class ProfileActivity extends BaseActivity {
             uploadToCloudinary(imageUri);
         }
     }
+
     private void uploadToCloudinary(Uri imageUri) {
         try {
             InputStream iStream = getContentResolver().openInputStream(imageUri);
             byte[] inputData = getBytes(iStream);
 
+            String mimeType = getContentResolver().getType(imageUri); // lấy đúng mime type
+
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
-                    .addFormDataPart("file", "my_image.jpg",
-                            RequestBody.create(MediaType.parse("image/*"), inputData))
-                    .addFormDataPart("upload_preset", "AppFood")
+                    .addFormDataPart("file", "avatar.jpg",
+                            RequestBody.create(MediaType.parse(mimeType), inputData))
+                    .addFormDataPart("upload_preset", "AppFood") // chắc chắn đã tạo preset này trong Cloudinary
+                    .build();
+
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
                     .build();
 
             Request request = new Request.Builder()
-                    .url("https://console.cloudinary.com/console/c-86f89810614d7a45c96d3e64c45892/media_library/folders/cb308811ce8913b4bfcda6362b62495218?view_mode=list")
+                    .url("https://api.cloudinary.com/v1_1/dnnntf6qx/image/upload")
                     .post(requestBody)
                     .build();
 
-            OkHttpClient client = new OkHttpClient();
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
+                    runOnUiThread(() ->
+                            Toast.makeText(ProfileActivity.this, "Lỗi upload: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                    );
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
+                    String json = response.body().string();
                     if (response.isSuccessful()) {
-                        String json = response.body().string();
                         try {
                             JSONObject obj = new JSONObject(json);
                             String imageUrl = obj.getString("secure_url");
@@ -156,20 +181,37 @@ public class ProfileActivity extends BaseActivity {
                                         .load(imageUrl)
                                         .into(binding.avaBtn);
 
-                                // (Tùy chọn) Lưu vào Firebase nếu bạn cần
-                                // FirebaseDatabase.getInstance().getReference("Users").child(userId).child("avatar").setValue(imageUrl);
+                                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                                if (currentUser != null) {
+                                    String userId = currentUser.getUid();
+                                    FirebaseDatabase.getInstance().getReference("Users")
+                                            .child(userId)
+                                            .child("avatar")
+                                            .setValue(imageUrl)
+                                            .addOnSuccessListener(aVoid ->
+                                                    Toast.makeText(ProfileActivity.this, "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show())
+                                            .addOnFailureListener(e ->
+                                                    Toast.makeText(ProfileActivity.this, "Lỗi khi lưu ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                }
                             });
-
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            runOnUiThread(() ->
+                                    Toast.makeText(ProfileActivity.this, "Lỗi xử lý JSON", Toast.LENGTH_SHORT).show());
                         }
+                    } else {
+                        Log.e("CLOUDINARY_ERROR", json); // xem chi tiết lỗi
+                        runOnUiThread(() ->
+                                Toast.makeText(ProfileActivity.this, "Upload thất bại: " + response.message(), Toast.LENGTH_SHORT).show());
                     }
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(ProfileActivity.this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();

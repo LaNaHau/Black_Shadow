@@ -75,32 +75,30 @@ public class RegisterActivity extends BaseActivity {
             mAuth.createUserWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // Lấy user ID
                             String userId = mAuth.getCurrentUser().getUid();
-                            User user = new User(userName,fullName,userId,email,phone);
 
-                            // Ghi vào Realtime Database
-                           firebaseDatabase.getReference("Users")
-                                    .child(userId)
-                                    .setValue(user)
-                                    .addOnCompleteListener(saveTask -> {
-                                        if (saveTask.isSuccessful()) {
-                                            Toast.makeText(this, "Sign up successful!",
-                                                    Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(RegisterActivity.this,
-                                                    LoginActivity.class));
-                                            finish();
-                                        } else {
-                                            Toast.makeText(this, "Failed to save user data: " + saveTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                            User user = new User(userName, fullName, userId, email, phone);
 
+                            saveUserToDatabase(user);
                         } else {
                             Toast.makeText(this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.e("Error", task.getException().getMessage());
+                            Log.e("AuthError", task.getException().getMessage());
                         }
                     });
         });
     }
+    private void saveUserToDatabase(User user) {
+        firebaseDatabase.getReference("Users")
+                .child(user.getUserId())
+                .setValue(user)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(RegisterActivity.this, "Lỗi lưu thông tin người dùng: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+
 
 }

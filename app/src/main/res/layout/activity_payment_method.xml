@@ -1,0 +1,65 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Chọn phương thức thanh toán"
+        android:textSize="18sp"
+        android:layout_marginBottom="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupPayment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioCOD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thanh toán khi nhận hàng (COD)" />
+
+        <RadioButton
+            android:id="@+id/radioQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thanh toán qua mã QR" />
+    </RadioGroup>
+
+    <ImageView
+        android:id="@+id/imgQR"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitCenter" />
+    <Button
+        android:id="@+id/btnConfirmQR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tôi đã thanh toán"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:text="Xác nhận thanh toán"
+        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvQRCountdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thời gian còn lại: 05:00"
+        android:textSize="16sp"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"/>
+
+</LinearLayout>
