@@ -24,6 +24,8 @@ public class PaymentMethodActivity extends BaseActivity {
 
     ActivityPaymentMethodBinding binding;
     CountDownTimer qrCountdownTimer;
+    private static final long QR_VALID_DURATION = 5 * 60 * 1000; // 5 phút
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,41 +37,53 @@ public class PaymentMethodActivity extends BaseActivity {
 
     private void setVariable() {
         Order order = (Order) getIntent().getSerializableExtra("order_data");
-        order.recalculateFinalTotal();
+
         if (order == null) {
             showToast("Không nhận được thông tin đơn hàng");
             finish();
             return;
         }
-        Log.e("oder", "" + order.toString());
+
+        order.recalculateFinalTotal();
+        Log.e("Order", "" + order);
 
         binding.radioGroupPayment.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.radioQR) {
                 binding.imgQR.setVisibility(View.VISIBLE);
                 binding.btnConfirmQR.setVisibility(View.VISIBLE);
-                generateAndSaveOrderQR(order);
+                generateAndDisplayOrderQR(order);
             } else {
                 binding.imgQR.setVisibility(View.GONE);
                 binding.btnConfirmQR.setVisibility(View.GONE);
+                binding.tvQRCountdown.setVisibility(View.GONE);
             }
         });
+
         String customOrderId = CustomIdGeneratorUtils.generateUserId("ORDER_");
         order.setOrderId(customOrderId);
+
         binding.btnConfirm.setOnClickListener(v -> {
             if (binding.radioCOD.isChecked()) {
                 order.setStatus("COD - Pending");
                 saveOrderToFirebase(order, true);
                 showToast("Đã chọn thanh toán khi nhận hàng");
             } else if (binding.radioQR.isChecked()) {
-                order.setStatus("Awaiting QR Payment");
-//                saveOrderToFirebase(order, false);
-                showToast("Vui lòng quét mã QR để thanh toán");
+                if (isQRExpired(order)) {
+                    showToast("Mã QR đã hết hạn, vui lòng tạo lại");
+                } else {
+                    showToast("Vui lòng quét mã QR để thanh toán");
+                }
             } else {
                 showToast("Vui lòng chọn phương thức thanh toán");
             }
         });
 
         binding.btnConfirmQR.setOnClickListener(v -> {
+            if (isQRExpired(order)) {
+                showToast("Mã QR đã hết hạn. Không thể xác nhận.");
+                return;
+            }
+
             order.setStatus("Paid via QR");
             order.setPaymentConfirmTime(System.currentTimeMillis());
             saveOrderToFirebase(order, true);
@@ -77,9 +91,7 @@ public class PaymentMethodActivity extends BaseActivity {
         });
     }
 
-    private void generateAndSaveOrderQR(Order order) {
-        Log.e("Payment", "Final Total nhận được: " + order.getFinalTotal());
-
+    private void generateAndDisplayOrderQR(Order order) {
         if (order.getFinalTotal() <= 0) {
             showToast("Tổng tiền không hợp lệ");
             return;
@@ -90,8 +102,7 @@ public class PaymentMethodActivity extends BaseActivity {
             return;
         }
 
-        if ("Awaiting QR Payment".equals(order.getStatus())
-                && System.currentTimeMillis() < order.getPaymentConfirmTime()) {
+        if (!isQRExpired(order)) {
             showToast("QR đã được tạo và còn hiệu lực");
             return;
         }
@@ -101,9 +112,13 @@ public class PaymentMethodActivity extends BaseActivity {
         try {
             Bitmap qrBitmap = QRCodeUtils.generateQRCode(qrContent, 500);
             binding.imgQR.setImageBitmap(qrBitmap);
+
             order.setStatus("Awaiting QR Payment");
-            order.setPaymentConfirmTime(System.currentTimeMillis() + 5 * 60 * 1000);
-            startQRCountdown(5 * 60 * 1000);
+            long expiryTime = System.currentTimeMillis() + QR_VALID_DURATION;
+            order.setPaymentConfirmTime(expiryTime);
+
+            startQRCountdown(QR_VALID_DURATION);
+
             Log.d("QR Content", qrContent);
         } catch (WriterException e) {
             e.printStackTrace();
@@ -113,6 +128,7 @@ public class PaymentMethodActivity extends BaseActivity {
 
     private void startQRCountdown(long durationInMillis) {
         binding.tvQRCountdown.setVisibility(View.VISIBLE);
+
         if (qrCountdownTimer != null) qrCountdownTimer.cancel();
 
         qrCountdownTimer = new CountDownTimer(durationInMillis, 1000) {
@@ -135,6 +151,11 @@ public class PaymentMethodActivity extends BaseActivity {
         }.start();
     }
 
+    private boolean isQRExpired(Order order) {
+        return order.getPaymentConfirmTime() == 0
+                || System.currentTimeMillis() > order.getPaymentConfirmTime();
+    }
+
     private void saveOrderToFirebase(Order order, boolean finishAfter) {
         firebaseDatabase.getReference("orders")
                 .child(order.getOrderId())
@@ -145,11 +166,8 @@ public class PaymentMethodActivity extends BaseActivity {
                         Intent intent = new Intent();
                         intent.putExtra("order_success", true);
                         setResult(RESULT_OK, intent);
-
                         finish();
                     }
-
-
                 })
                 .addOnFailureListener(e ->
                         showToast("Lỗi khi lưu đơn hàng: " + e.getMessage())
@@ -180,3 +198,4 @@ public class PaymentMethodActivity extends BaseActivity {
         }
     }
 }
+

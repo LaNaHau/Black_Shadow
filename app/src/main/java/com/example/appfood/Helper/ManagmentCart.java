@@ -1,9 +1,11 @@
 package com.example.appfood.Helper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.example.appfood.Domain.Foods;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -75,8 +77,8 @@ public class ManagmentCart {
     }
 
     public void clearCart() {
-        ArrayList<Foods> listItem = new ArrayList<>();
-        tinyDB.putListObject("CartList", listItem);
+        tinyDB.clear(); // Xoá dữ liệu giỏ hàng khỏi TinyDB
     }
+
 
 }

@@ -2,6 +2,7 @@ package com.example.appfood.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class CartActivity extends BaseActivity {
     ActivityCartBinding binding;
     ManagmentCart managmentCart;
     private static final int REQUEST_ADDRESS = 1;
+    private static final int REQUEST_PAYMENT = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +47,12 @@ public class CartActivity extends BaseActivity {
         if (managmentCart.getListCart().isEmpty()) {
             binding.emptyTxt.setVisibility(View.VISIBLE);
             binding.scrollViewCart.setVisibility(View.GONE);
-        } else {
+        }else {
             binding.emptyTxt.setVisibility(View.GONE);
             binding.scrollViewCart.setVisibility(View.VISIBLE);
         }
         binding.cartView.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL,
-                false));
+                LinearLayoutManager.VERTICAL, false));
         binding.cartView.setAdapter(new CartAdapter(managmentCart.getListCart(),
                 managmentCart, () -> calculateCart()));
 
@@ -61,25 +62,26 @@ public class CartActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ADDRESS && resultCode == RESULT_OK) {
+
+        if (requestCode == REQUEST_ADDRESS && resultCode == RESULT_OK && data != null) {
             Address selected = (Address) data.getSerializableExtra("selected_address");
-
-
-            // Hoặc tải lại dữ liệu giỏ hàng nếu từ server
             if (selected != null) {
-                // Cập nhật giao diện hoặc dùng địa chỉ này
                 binding.phoneTxt.setText(selected.getPhone());
                 binding.addTxt.setText(selected.getFullAddress());
                 binding.nameTxt.setText(selected.getName());
             }
-            loadCartData(); // reload lại cart sau khi chọn địa chỉ
+            reloadCart(new ArrayList<>());
+            calculateCart();
         }
 
-        // Xử lý sau khi thanh toán xong
-        if (resultCode == RESULT_OK && data != null && data.getBooleanExtra("order_success", false)) {
-            managmentCart.clearCart();  // Xoá dữ liệu cart
-            initCart();  // Tải lại giỏ hàng
-            calculateCart();  // Cập nhật lại tổng tiền
+        if (requestCode == REQUEST_PAYMENT && resultCode == RESULT_OK && data != null) {
+            boolean success = data.getBooleanExtra("order_success", false);
+            if (success) {
+                Log.d("CartActivity", "Order success: clearing cart");
+                managmentCart.clearCart();
+                initCart();
+                calculateCart();
+            }
         }
     }
 
@@ -181,9 +183,8 @@ public class CartActivity extends BaseActivity {
     }
 
     private void reloadCart(ArrayList<Foods> list) {
-        CartAdapter cartAdapter = new CartAdapter(list); // Tạo adapter mới rỗng
-        binding.cartView.setAdapter(cartAdapter); // Gán lại adapter
-        binding.totalTxt.setText("$0.0"); // Reset tổng tiền
+       managmentCart.clearCart();
+
     }
 
 
@@ -225,8 +226,10 @@ public class CartActivity extends BaseActivity {
                     managmentCart.getListCart(), itemTotal, tax, delivery, total, orderTime);
 
             Intent intent = new Intent(CartActivity.this, PaymentMethodActivity.class);
-            intent.putExtra("order_data", order);  // Truyền order sang PaymentMethodActivity
-            startActivity(intent);
+            intent.putExtra("order_data", order);
+            startActivityForResult(intent, REQUEST_PAYMENT); // ✅ ĐÚNG
+
+
         });
 
 
