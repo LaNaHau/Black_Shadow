@@ -22,14 +22,14 @@ public class LoginActivity extends BaseActivity {
     private void setVariable() {
         binding.signUpButton.setOnClickListener(c -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
         binding.goButton.setOnClickListener(v -> {
-            String userName = binding.editUsername.getText().toString().trim();
+            String email = binding.editEmail.getText().toString().trim();
             String pass = binding.editPassword.getText().toString().trim();
 
-            boolean isUsernameValid = Utils.inputValidation(binding.editUsername);
+            boolean isEmailValid = Utils.inputValidation(binding.editEmail);
             boolean isPasswordValid = Utils.inputValidation(binding.editPassword);
 
-            if (isUsernameValid && isPasswordValid) {
-                mAuth.signInWithEmailAndPassword(userName, pass)
+            if (isEmailValid && isPasswordValid) {
+                mAuth.signInWithEmailAndPassword(email, pass)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 // Đăng nhập thành công
@@ -42,8 +42,8 @@ public class LoginActivity extends BaseActivity {
                         });
             } else {
                 // Gán lỗi cho từng ô nếu cần thiết
-                if (!isUsernameValid) {
-                    binding.editUsername.setError("Tên đăng nhập không hợp lệ");
+                if (!isEmailValid) {
+                    binding.editEmail.setError("Email đăng nhập không hợp lệ");
                 }
                 if (!isPasswordValid) {
                     binding.editPassword.setError("Mật khẩu không hợp lệ");

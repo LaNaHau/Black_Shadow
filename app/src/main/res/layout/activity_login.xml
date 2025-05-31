@@ -48,13 +48,13 @@
             app:layout_constraintTop_toBottomOf="@+id/welcome_message" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username"
+            android:id="@+id/email"
             style="@style/CustomEditTextTheme"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:hint="@string/username"
-            android:transitionName="@string/username"
+            android:hint="@string/email"
+            android:transitionName="@string/email"
             app:boxBackgroundMode="none"
 
             app:errorEnabled="false"
@@ -63,7 +63,7 @@
             app:layout_constraintTop_toBottomOf="@+id/sign_in_message">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editUsername"
+                android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/red_bg_stroke" />
@@ -82,9 +82,9 @@
 
             app:boxBackgroundMode="none"
             app:errorEnabled="false"
-            app:layout_constraintEnd_toEndOf="@+id/username"
-            app:layout_constraintStart_toStartOf="@+id/username"
-            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:layout_constraintEnd_toEndOf="@+id/email"
+            app:layout_constraintStart_toStartOf="@+id/email"
+            app:layout_constraintTop_toBottomOf="@+id/email"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
