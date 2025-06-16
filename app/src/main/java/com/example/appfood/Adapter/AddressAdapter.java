@@ -35,7 +35,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     @NonNull
     @Override
     public AddressAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_address, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_address, parent,
+                false);
         return new ViewHolder(view);
     }
 
@@ -48,7 +49,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
         holder.tvEdit.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), AddAddressActivity.class);
-            intent.putExtra("address", address);  // Address cần implements Serializable
+            intent.putExtra("address", address);
             v.getContext().startActivity(intent);
         });
 
@@ -56,12 +57,10 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("addresses").child(userId);
 
-            // Xóa mặc định cũ
             for (Address add : addressList) {
                 ref.child(add.getId()).child("default").setValue(false);
             }
 
-            // Cập nhật mặc định mới
             ref.child(address.getId()).child("default").setValue(true);
 
             if (listener != null) {

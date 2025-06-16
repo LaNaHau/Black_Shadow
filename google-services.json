@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "407635338178",
+    "firebase_url": "https://sansan-30297-default-rtdb.firebaseio.com",
     "project_id": "sansan-30297",
     "storage_bucket": "sansan-30297.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.appfood"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "407635338178-2ecnlku3khmqbl85fgn0m9np7j2p10ae.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.appfood",
+            "certificate_hash": "7740528519a3b4ea34d79af321fa0717492cbd94"
+          }
+        },
+        {
+          "client_id": "407635338178-9caoja01nj9dubilq8jnf8gno0k4csub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAvcjgk_hQ-K5E9ICGLGSSqMHL13mmxSog"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407635338178-9caoja01nj9dubilq8jnf8gno0k4csub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

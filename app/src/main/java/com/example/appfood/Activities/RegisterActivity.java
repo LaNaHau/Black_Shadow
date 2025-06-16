@@ -6,15 +6,18 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.appfood.Domain.User;
+import com.example.appfood.Domain.Voucher;
 import com.example.appfood.Utils.SystemUtils;
 import com.example.appfood.Utils.Utils;
 import com.example.appfood.databinding.ActivityRegisterBinding;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
 public class RegisterActivity extends BaseActivity {
     ActivityRegisterBinding binding;
+    private DatabaseReference databaseRef;
 
 
     @Override
@@ -40,7 +43,6 @@ public class RegisterActivity extends BaseActivity {
 
             SystemUtils.hideKeyBoard(this);
 
-            // Validate inputs
             if (!Utils.inputValidation(binding.editFullname)) {
                 binding.editFullname.setError("Please enter your Fullname");
                 return;
@@ -71,13 +73,14 @@ public class RegisterActivity extends BaseActivity {
                 return;
             }
 
-            // Tạo tài khoản Firebase
             mAuth.createUserWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             String userId = mAuth.getCurrentUser().getUid();
 
                             User user = new User(userName, fullName, userId, email, phone);
+
+
 
                             saveUserToDatabase(user);
                         } else {

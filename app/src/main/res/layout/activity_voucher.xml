@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/voucherRootLayout"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FAFAFA"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/voucherTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Danh sách voucher"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="12dp"
+        android:textColor="#000000" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- VOUCHER GIẢM GIÁ -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Voucher giảm giá món"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                android:textColor="#FF5722" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/discountVoucherList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- VOUCHER MIỄN SHIP -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Voucher miễn ship"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                android:textColor="#4CAF50" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/freeshipVoucherList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="12dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnApplyVoucher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Áp dụng"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#673AB7"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

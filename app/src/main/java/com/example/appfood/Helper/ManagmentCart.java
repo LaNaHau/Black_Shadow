@@ -13,10 +13,14 @@ import java.util.ArrayList;
 public class ManagmentCart {
     private Context context;
     private TinyDB tinyDB;
+    private String userId;
 
-    public ManagmentCart(Context context) {
+
+    public ManagmentCart(Context context, String userId) {
         this.context = context;
         this.tinyDB = new TinyDB(context);
+        this.userId = userId;
+
     }
 
     public void insertFood(Foods item) {
@@ -35,12 +39,12 @@ public class ManagmentCart {
         } else {
             listpop.add(item);
         }
-        tinyDB.putListObject("CartList", listpop);
+        tinyDB.putListObject("CartList_" + userId, listpop);
         Toast.makeText(context, "Added to your Cart", Toast.LENGTH_SHORT).show();
     }
 
     public ArrayList<Foods> getListCart() {
-        return tinyDB.getListObject("CartList",Foods.class);
+        return tinyDB.getListObject("CartList_" + userId, Foods.class);
     }
 
     public Double getTotalFee() {
@@ -58,26 +62,26 @@ public class ManagmentCart {
         } else {
             listItem.get(position).setNumberInCart(listItem.get(position).getNumberInCart() - 1);
         }
-        tinyDB.putListObject("CartList", listItem);
+        tinyDB.putListObject("CartList_" + userId, listItem);
         changeNumberItemsListener.change();
     }
 
     public void plusNumberItem(ArrayList<Foods> listItem, int position,
                                ChangeNumberItemsListener changeNumberItemsListener) {
         listItem.get(position).setNumberInCart(listItem.get(position).getNumberInCart() + 1);
-        tinyDB.putListObject("CartList", listItem);
+        tinyDB.putListObject("CartList_" + userId, listItem);
         changeNumberItemsListener.change();
     }
 
     public void removeItem(ArrayList<Foods> listItem, int position,
                            ChangeNumberItemsListener changeNumberItemsListener) {
         listItem.remove(position);
-        tinyDB.putListObject("CartList", listItem);
+        tinyDB.putListObject("CartList_" + userId, listItem);
         changeNumberItemsListener.change();
     }
 
     public void clearCart() {
-        tinyDB.clear(); // Xoá dữ liệu giỏ hàng khỏi TinyDB
+        tinyDB.remove("CartList_" + userId);
     }
 
 

@@ -23,18 +23,16 @@ import java.util.List;
 public class AddressActivity extends BaseActivity {
     private ActivityAddressBinding binding;
     private AddressAdapter adapter;
-    private List<Address> addressList;
+    private List<Address> addressList = new ArrayList<>();
     private DatabaseReference databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityAddressBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        addressList = new ArrayList<>();
-        AddressAdapter adapter = new AddressAdapter(addressList, selectedAddress -> {
+        adapter = new AddressAdapter(addressList, selectedAddress -> {
             Intent resultIntent = new Intent();
             resultIntent.putExtra("selected_address", selectedAddress);
             setResult(RESULT_OK, resultIntent);
@@ -44,9 +42,8 @@ public class AddressActivity extends BaseActivity {
         binding.addressRecyclerView.setAdapter(adapter);
 
         String userId = mAuth.getCurrentUser().getUid();
-        databaseRef = FirebaseDatabase.getInstance().getReference("addresses").child(userId);
+        databaseRef = firebaseDatabase.getReference("addresses").child(userId);
 
-        // Lắng nghe thay đổi dữ liệu theo thời gian thực
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -68,7 +65,6 @@ public class AddressActivity extends BaseActivity {
             }
         });
 
-        // Mở màn hình thêm địa chỉ
         binding.btnAddAddress.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddAddressActivity.class);
             intent.putExtra("userId", userId);

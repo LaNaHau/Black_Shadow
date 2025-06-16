@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.appfood.Domain.Order;
+import com.example.appfood.Domain.Voucher;
 import com.example.appfood.R;
 import com.example.appfood.Utils.CustomIdGeneratorUtils;
 import com.example.appfood.Utils.QRCodeUtils;
@@ -37,6 +38,14 @@ public class PaymentMethodActivity extends BaseActivity {
 
     private void setVariable() {
         Order order = (Order) getIntent().getSerializableExtra("order_data");
+        Voucher discountVoucher = (Voucher) getIntent().getSerializableExtra("selected_discount_voucher");
+        Voucher freeshipVoucher = (Voucher) getIntent().getSerializableExtra("selected_freeship_voucher");
+
+        if (discountVoucher != null) {
+            // Hiển thị: ví dụ
+        }
+        if (freeshipVoucher != null) {
+        }
 
         if (order == null) {
             showToast("Không nhận được thông tin đơn hàng");

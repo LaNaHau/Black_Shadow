@@ -27,7 +27,6 @@ public class AddAddressActivity extends BaseActivity {
         userId = getIntent().getStringExtra("userId");
         userAddressRef = firebaseDatabase.getReference("addresses").child(userId);
 
-        // Nếu nhận được địa chỉ cần sửa
         Address address = (Address) getIntent().getSerializableExtra("address");
         if (address != null) {
             addressId = address.getId();

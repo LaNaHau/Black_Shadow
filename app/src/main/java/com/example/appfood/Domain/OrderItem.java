@@ -6,7 +6,7 @@ public class OrderItem {
     public int price;
     public int quantity;
 
-    public OrderItem() {} // Firebase cần constructor rỗng
+    public OrderItem() {}
 
     public OrderItem(String itemId, String name, int price, int quantity) {
         this.itemId = itemId;

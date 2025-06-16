@@ -1,6 +1,8 @@
 package com.example.appfood.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -43,7 +45,6 @@ import okhttp3.Response;
 public class ProfileActivity extends BaseActivity {
     ActivityProfileBinding binding;
     User user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,9 +111,14 @@ public class ProfileActivity extends BaseActivity {
 
         binding.logoutBtn.setOnClickListener(v -> {
             mAuth.signOut();
-            // Quay về màn hình đăng nhập
+
+            SharedPreferences preferences = getSharedPreferences("cart", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
+
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa backstack
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -122,7 +128,7 @@ public class ProfileActivity extends BaseActivity {
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
-        binding.backBtn.setOnClickListener(v -> startActivity(new Intent(ProfileActivity.this, LoginActivity.class)));
+        binding.backBtn.setOnClickListener(v -> startActivity(new Intent(ProfileActivity.this, MainActivity.class)));
 
     }
 

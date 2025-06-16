@@ -15,7 +15,7 @@ public class Order implements Serializable {
     private double tax;
     private double deliveryFee;
     private double totalAmount;
-    private long orderTime;  // timestamp
+    private long orderTime;
     private String status;
     private long paymentConfirmTime;
     private double finalTotal;
