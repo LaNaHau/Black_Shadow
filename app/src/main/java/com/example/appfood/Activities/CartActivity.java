@@ -78,7 +78,8 @@ public class CartActivity extends BaseActivity {
     }
 
     private void setVariable() {
-        binding.backBtn.setOnClickListener(v -> finish());
+        binding.backBtn.setOnClickListener(v ->
+                startActivity(new Intent(CartActivity.this, MainActivity.class)));
 
         binding.checkOutBtn.setOnClickListener(v -> {
             FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -165,7 +166,7 @@ public class CartActivity extends BaseActivity {
         binding.totalFeeTxt.setText("$" + String.format("%.2f", itemTotal));
         binding.taxTxt.setText("$" + String.format("%.2f", tax));
         binding.deliveryTxt.setText("- $" + String.format("%.2f", delivery));
-        binding.totalTxt.setText("$" + String.format("%.2f", total));
+        binding.totalTxt.setText(String.format("%.2f", total)+ " VND");
 
         // Cập nhật UI voucher
         String voucherText = "";

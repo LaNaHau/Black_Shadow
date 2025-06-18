@@ -1,18 +1,16 @@
 package com.example.appfood.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.bumptech.glide.Glide;
 import com.example.appfood.Domain.User;
@@ -43,15 +41,28 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ProfileActivity extends BaseActivity {
+
     ActivityProfileBinding binding;
     User user;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
+        boolean isDark = prefs.getBoolean("dark_mode", false);
+        AppCompatDelegate.setDefaultNightMode(
+                isDark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
+
         super.onCreate(savedInstanceState);
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         loadUserInfo();
         setAvailable();
+        setupDarkModeSwitch(); // ✅ xử lý chuyển đổi dark mode
     }
 
     private void loadUserInfo() {
@@ -95,28 +106,15 @@ public class ProfileActivity extends BaseActivity {
         } else {
             Toast.makeText(this, "Chưa đăng nhập", Toast.LENGTH_SHORT).show();
         }
-
-
     }
-
-
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private Uri imageUri;
-
 
     private void setAvailable() {
         binding.editProfileBtn.setOnClickListener(v -> {
-
+            // Future: mở EditProfileActivity
         });
 
         binding.logoutBtn.setOnClickListener(v -> {
             mAuth.signOut();
-
-            SharedPreferences preferences = getSharedPreferences("cart", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.clear();
-            editor.apply();
-
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -128,8 +126,9 @@ public class ProfileActivity extends BaseActivity {
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
-        binding.backBtn.setOnClickListener(v -> startActivity(new Intent(ProfileActivity.this, MainActivity.class)));
 
+        binding.backBtn.setOnClickListener(v ->
+                startActivity(new Intent(ProfileActivity.this, MainActivity.class)));
     }
 
     @Override
@@ -146,13 +145,13 @@ public class ProfileActivity extends BaseActivity {
             InputStream iStream = getContentResolver().openInputStream(imageUri);
             byte[] inputData = getBytes(iStream);
 
-            String mimeType = getContentResolver().getType(imageUri); // lấy đúng mime type
+            String mimeType = getContentResolver().getType(imageUri);
 
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("file", "avatar.jpg",
                             RequestBody.create(MediaType.parse(mimeType), inputData))
-                    .addFormDataPart("upload_preset", "AppFood") // chắc chắn đã tạo preset này trong Cloudinary
+                    .addFormDataPart("upload_preset", "AppFood")
                     .build();
 
             OkHttpClient client = new OkHttpClient.Builder()
@@ -170,8 +169,7 @@ public class ProfileActivity extends BaseActivity {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     runOnUiThread(() ->
-                            Toast.makeText(ProfileActivity.this, "Lỗi upload: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                    );
+                            Toast.makeText(ProfileActivity.this, "Lỗi upload: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                 }
 
                 @Override
@@ -201,23 +199,20 @@ public class ProfileActivity extends BaseActivity {
                                 }
                             });
                         } catch (JSONException e) {
-                            e.printStackTrace();
                             runOnUiThread(() ->
                                     Toast.makeText(ProfileActivity.this, "Lỗi xử lý JSON", Toast.LENGTH_SHORT).show());
                         }
                     } else {
-                        Log.e("CLOUDINARY_ERROR", json); // xem chi tiết lỗi
+                        Log.e("CLOUDINARY_ERROR", json);
                         runOnUiThread(() ->
                                 Toast.makeText(ProfileActivity.this, "Upload thất bại: " + response.message(), Toast.LENGTH_SHORT).show());
                     }
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
             Toast.makeText(ProfileActivity.this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
@@ -230,4 +225,19 @@ public class ProfileActivity extends BaseActivity {
         return byteBuffer.toByteArray();
     }
 
+    private void setupDarkModeSwitch() {
+        binding.darkModeSwitch.setChecked(
+                getSharedPreferences("settings", MODE_PRIVATE).getBoolean("dark_mode", false)
+        );
+
+        binding.darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = getSharedPreferences("settings", MODE_PRIVATE).edit();
+            editor.putBoolean("dark_mode", isChecked);
+            editor.apply();
+
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+            );
+        });
+    }
 }

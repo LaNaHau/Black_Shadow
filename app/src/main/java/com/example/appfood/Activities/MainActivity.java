@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
@@ -18,6 +19,10 @@ import com.example.appfood.Adapter.SliderViewHolderAdapter;
 import com.example.appfood.Domain.Category;
 import com.example.appfood.Domain.SliderItem;
 import com.example.appfood.Domain.User;
+import com.example.appfood.Fragment.CartFragment;
+import com.example.appfood.Fragment.FavouriteFragment;
+import com.example.appfood.Fragment.HomeFragment;
+import com.example.appfood.Fragment.ProfileFragment;
 import com.example.appfood.R;
 import com.example.appfood.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseUser;

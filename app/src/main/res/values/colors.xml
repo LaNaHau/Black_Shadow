@@ -8,4 +8,6 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="red_500">#F44336</color>
+    <color name="red_200">#EF9A9A</color>
 </resources>

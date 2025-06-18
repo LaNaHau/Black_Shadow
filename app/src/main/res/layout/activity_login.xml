@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="0dp"
-        android:layout_height="500dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
@@ -31,7 +31,6 @@
             android:text="@string/hello_there_welcome_back"
             android:textColor="@color/black"
             android:textSize="25sp"
-            android:transitionName="@string/hello_there_welcome_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,31 +42,27 @@
             android:includeFontPadding="false"
             android:text="@string/sign_in_to_continue"
             android:textSize="18sp"
-            android:transitionName="@string/sign_in_to_continue"
             app:layout_constraintStart_toStartOf="@+id/welcome_message"
             app:layout_constraintTop_toBottomOf="@+id/welcome_message" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username"
+            android:id="@+id/email"
             style="@style/CustomEditTextTheme"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:hint="@string/username"
-            android:transitionName="@string/username"
-            app:boxBackgroundMode="none"
-
-            app:errorEnabled="false"
+            android:hint="Email"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sign_in_message">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editUsername"
+                android:id="@+id/editEmail"
                 android:layout_width="match_parent"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_height="wrap_content"
                 android:background="@drawable/red_bg_stroke" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -77,14 +72,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/password"
+            android:textColor="?attr/colorOnSurface"
             android:textColorHint="@color/dark_blue"
-            android:transitionName="@string/password"
-
-            app:boxBackgroundMode="none"
-            app:errorEnabled="false"
-            app:layout_constraintEnd_toEndOf="@+id/username"
-            app:layout_constraintStart_toStartOf="@+id/username"
-            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:layout_constraintEnd_toEndOf="@+id/email"
+            app:layout_constraintStart_toStartOf="@+id/email"
+            app:layout_constraintTop_toBottomOf="@+id/email"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -92,56 +84,94 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/red_bg_stroke"
+                android:textColor="?attr/colorOnSurface"
                 android:inputType="textPassword" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- ✅ Checkbox lưu tài khoản -->
+        <CheckBox
+            android:id="@+id/checkboxRemember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lưu tài khoản"
+            android:textColor="@color/black"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintStart_toStartOf="@+id/password" />
+
+        <!-- ✅ Quên mật khẩu -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/forgotPasswordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quên mật khẩu?"
+            android:textColor="@color/dark_blue"
+            android:textSize="14sp"
+            android:backgroundTint="@android:color/transparent"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            app:cornerRadius="0dp"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            app:layout_constraintTop_toBottomOf="@+id/checkboxRemember"
+            app:layout_constraintStart_toStartOf="@+id/password" />
+
+        <!-- Nút đăng nhập -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/goButton"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/red_bg_full_corner"
-            android:includeFontPadding="false"
             android:text="@string/go"
-            android:transitionName="@string/go"
             app:layout_constraintEnd_toEndOf="@+id/password"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password"
-            tools:textColor="@color/white" />
+            app:layout_constraintTop_toBottomOf="@+id/forgotPasswordText" />
 
+        <!-- Nút Google -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+
+            app:iconPadding="12dp"
+            android:text="Sign in with Google"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            app:cornerRadius="16dp"
+            app:iconGravity="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/goButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Nút đăng ký -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signUpButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="64dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/red_bg_full_corner"
+            android:layout_marginTop="32dp"
             android:text="@string/new_user_sign_up"
+            android:background="@drawable/red_bg_full_corner"
             android:textColor="@color/dark_blue"
-            android:transitionName="@string/new_user_sign_up"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnGoogleSignIn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/goButton" />
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Logo -->
     <ImageView
         android:id="@+id/logo_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/yellow_bg_full_corner"
         android:src="@drawable/img_3"
-        android:transitionName="app_icon"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

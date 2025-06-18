@@ -1,10 +1,12 @@
 package com.example.appfood.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,58 +51,144 @@ public class ListFoodActivity extends BaseActivity {
             binding.titleTxt.setText(searchKeyword);
         else binding.titleTxt.setText(categoryName);
 
-        binding.backBtn.setOnClickListener(v -> finish());
+        binding.backBtn.setOnClickListener(v ->
+                startActivity(new Intent(ListFoodActivity.this, MainActivity.class)));
     }
 
-    private void initList() {
-        DatabaseReference myRef = firebaseDatabase.getReference("Foods").child("Foods");
-        binding.progressBar.setVisibility(View.VISIBLE);
+//    private void initList() {
+//        DatabaseReference myRef = firebaseDatabase.getReference("Foods").child("Foods");
+//
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                list.clear();
+//
+//                for (DataSnapshot child : snapshot.getChildren()) {
+//                    Foods foodItem = child.getValue(Foods.class);
+//                    if (foodItem != null) {
+//                        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+//                            String title = foodItem.getTitle().toLowerCase();
+//                            if (title.contains(searchKeyword.toLowerCase())) {
+//                                list.add(foodItem);
+//                            }
+//                        } else {
+//                            Toast.makeText(ListFoodActivity.this,
+//                                    "Không tìm thấy kết quả tương ứng",
+//                                    Toast.LENGTH_SHORT).show();                         }
+//                    }
+//                }
+//
+//                if (!list.isEmpty()) {
+//                    adapter = new FoodLisAdapter(list);
+//                    binding.foodListView.setLayoutManager(new LinearLayoutManager(ListFoodActivity.this,
+//                            LinearLayoutManager.VERTICAL, false));
+//                    binding.foodListView.setAdapter(adapter);
+//                } else {
+//                    Toast.makeText(ListFoodActivity.this, "Không tìm thấy kết quả tương ứng", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                binding.progressBar.setVisibility(View.GONE);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("FoodList", "Database error: " + error.getMessage());
+//                binding.progressBar.setVisibility(View.GONE);
+//            }
+//        });
+//
+//        binding.progressBar.setVisibility(View.VISIBLE);
+//
+//        Query query = myRef.orderByChild("CategoryId").equalTo(categoryId);
+//
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot child : snapshot.getChildren()) {
+//                        Foods foodItem = child.getValue(Foods.class);
+//                        if (foodItem != null) {
+////                            if (searchKeyword != null && !searchKeyword.isEmpty()) {
+////                                if (foodItem.getTitle().toLowerCase().trim().contains(searchKeyword.toLowerCase().trim())) {
+////                                    list.add(foodItem);
+////                                }
+////                            } else {
+////                                if (foodItem.getCategoryId() == categoryId) {
+////
+////                                }
+////                            }
+//                            list.add(foodItem);
+//                        }
+//                    }
+//
+//
+//                    if (!list.isEmpty()) {
+//                        adapter = new FoodLisAdapter(list);
+//                        binding.foodListView.setLayoutManager(new LinearLayoutManager(ListFoodActivity.this,
+//                                LinearLayoutManager.VERTICAL, false));
+//                        binding.foodListView.setAdapter(adapter);
+//                    }else {
+//                        Toast.makeText(ListFoodActivity.this,
+//                                "Không tìm thấy kết quả tương ứng",
+//                                Toast.LENGTH_SHORT).show();                    }
+//                    binding.progressBar.setVisibility(View.GONE);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("FoodList", "Database error: " + error.getMessage());
+//                binding.progressBar.setVisibility(View.GONE);
+//            }
+//        });
+//
+//    }
+private void initList() {
+    DatabaseReference myRef = firebaseDatabase.getReference("Foods").child("Foods");
+    binding.progressBar.setVisibility(View.VISIBLE);
+    list.clear();
 
-        Query query = myRef.orderByChild("CategoryId").equalTo(categoryId);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        Foods foodItem = child.getValue(Foods.class);
-                        if (foodItem != null) {
-                            if (searchKeyword != null && !searchKeyword.isEmpty()) {
-                                if (foodItem.getTitle().toLowerCase().contains(searchKeyword.toLowerCase())) {
-                                    list.add(foodItem);
-                                }
-                            } else {
-                                if (foodItem.getCategoryId() == categoryId) {
-                                    list.add(foodItem);
-                                }
-                            }
+    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            for (DataSnapshot child : snapshot.getChildren()) {
+                Foods foodItem = child.getValue(Foods.class);
+                if (foodItem != null) {
+                    if (searchKeyword != null && !searchKeyword.isEmpty()) {
+                        if (foodItem.getTitle().toLowerCase().contains(searchKeyword.toLowerCase())) {
+                            list.add(foodItem);
+                        }
+                    } else {
+                        if (foodItem.getCategoryId() == categoryId) {
+                            list.add(foodItem);
                         }
                     }
-
-
-                    if (!list.isEmpty()) {
-                        // Gán adapter
-                        adapter = new FoodLisAdapter(list);
-                        binding.foodListView.setLayoutManager(new LinearLayoutManager(ListFoodActivity.this,
-                                LinearLayoutManager.VERTICAL, false));
-                        binding.foodListView.setAdapter(adapter);
-                    }else {
-                        // Hiển thị thông báo không có kết quả
-                        binding.titleTxt.setText("No food match with your search");
-                    }
-                    binding.progressBar.setVisibility(View.GONE);
                 }
-
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("FoodList", "Database error: " + error.getMessage());
-                binding.progressBar.setVisibility(View.GONE);
+            if (!list.isEmpty()) {
+                adapter = new FoodLisAdapter(list);
+                binding.foodListView.setLayoutManager(new LinearLayoutManager(
+                        ListFoodActivity.this, LinearLayoutManager.VERTICAL, false));
+                binding.foodListView.setAdapter(adapter);
+            } else {
+                Toast.makeText(ListFoodActivity.this,
+                        "Không tìm thấy kết quả tương ứng", Toast.LENGTH_SHORT).show();
             }
-        });
 
-    }
+            binding.progressBar.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.e("FoodList", "Database error: " + error.getMessage());
+            Toast.makeText(ListFoodActivity.this,
+                    "Lỗi tải dữ liệu: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            binding.progressBar.setVisibility(View.GONE);
+        }
+    });
+}
 
 
 }

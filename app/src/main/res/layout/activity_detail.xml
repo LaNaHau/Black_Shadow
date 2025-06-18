@@ -2,108 +2,92 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.DetailActivity">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="wrap_content"
-        android:layout_height="700dp"
-        android:background="@color/yellow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    <!-- Scrollable content -->
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/yellow"
             android:orientation="vertical">
 
+            <!-- Header: back, title, favorite icon -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="48dp"
-                android:layout_marginEnd="16dp">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="20dp">
 
                 <ImageView
                     android:id="@+id/backBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView3"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/back"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/back" />
-
-                <ImageView
-                    android:id="@+id/favoBtn"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/favorite" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="8dp"
                     android:text="Detail"
                     android:textColor="@color/dark_blue"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/pic"
-                    app:layout_constraintEnd_toStartOf="@+id/favoBtn"
-                    app:layout_constraintStart_toEndOf="@+id/backBtn"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toEndOf="@id/backBtn"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/favoBtn" />
+
+                <ImageView
+                    android:id="@+id/favoBtn"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/like"
+                    android:contentDescription="Favorite"
+                    android:tag="unliked"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <ImageView
                     android:id="@+id/pic"
                     android:layout_width="0dp"
                     android:layout_height="312dp"
+                    android:layout_marginTop="60px"
                     android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView3"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     tools:srcCompat="@tools:sample/avatars" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Detail card -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/linearLayout"
+                    android:id="@+id/contentCard"
                     android:layout_width="0dp"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
                     android:background="@drawable/white_bg_top_corner"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
+                    <!-- Title & Price Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -112,7 +96,7 @@
 
                         <TextView
                             android:id="@+id/titleTxt"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Title"
@@ -123,17 +107,15 @@
                         <TextView
                             android:id="@+id/priceTxt"
                             android:layout_width="wrap_content"
-
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:text="$0"
-                            android:textAlignment="textEnd"
                             android:textColor="@color/red"
                             android:textSize="20sp"
-                            android:textStyle="bold" />
-
+                            android:textStyle="bold"
+                            android:textAlignment="textEnd" />
                     </LinearLayout>
 
+                    <!-- Rating & Time Row -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -145,13 +127,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:numStars="5"
-
-                            android:progressTint="#ffc105"
                             android:rating="4"
                             android:stepSize="0.1"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:progressTint="#ffc105"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
                         <TextView
                             android:id="@+id/ratingTxt"
@@ -159,33 +140,33 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
                             android:text="Rating"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/ratingBar"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/imageView11"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/ratingBar"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/time" />
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
                         <TextView
                             android:id="@+id/timeTxt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
                             android:text="Time"
                             android:textColor="@color/dark_blue"
                             android:textStyle="bold"
+                            android:layout_marginEnd="4dp"
+                            app:layout_constraintEnd_toStartOf="@+id/timeIcon"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/imageView11"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        <ImageView
+                            android:id="@+id/timeIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/time"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <!-- Details Title -->
                     <TextView
                         android:id="@+id/textView8"
                         android:layout_width="match_parent"
@@ -196,6 +177,7 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
+                    <!-- Description -->
                     <TextView
                         android:id="@+id/descriptionTxt"
                         android:layout_width="match_parent"
@@ -205,28 +187,58 @@
                         android:textColor="@color/dark_blue"
                         android:textSize="16sp" />
 
+                    <TextView
+                        android:id="@+id/ratingTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="\u0110\u00e1nh gi\u00e1 c\u1ee7a b\u1ea1n:"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <RatingBar
+                        android:id="@+id/ratingBarInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="1.0"
+                        android:rating="0"
+                        android:isIndicator="true"
+                        android:layout_marginTop="8dp" />
+                    <Button
+                        android:id="@+id/submitRatingBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:text="Gửi đánh giá"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:backgroundTint="@color/red"
+                        android:layout_gravity="center_horizontal" />
                 </LinearLayout>
 
+                <!-- Quantity Selector -->
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="45dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/red_bg_full_corner"
                     android:gravity="center"
-
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/linearLayout">
+                    app:layout_constraintTop_toTopOf="@+id/contentCard">
 
                     <TextView
                         android:id="@+id/minusBtn"
-
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:layout_marginTop="2dp"
-                        android:gravity="center"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_horizontal"
                         android:text="-"
                         android:textColor="@color/white"
                         android:textSize="18sp"
@@ -234,11 +246,11 @@
 
                     <TextView
                         android:id="@+id/numTxt"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center"
+                        android:layout_marginBottom="0dp"
+                        android:gravity="center_horizontal"
                         android:text="1"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -249,57 +261,54 @@
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:layout_gravity="center"
-                        android:layout_marginTop="2dp"
-                        android:gravity="center"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_horizontal"
                         android:text="+"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
     </ScrollView>
 
+    <!-- Bottom Bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/yellow_bg_full_corner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cartButton"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
             android:background="@drawable/red_bg_full_corner"
             android:drawableStart="@drawable/cart"
             android:paddingStart="16dp"
             android:text="Add to cart"
             android:textColor="@color/white"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView13" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
             android:text="Total Price"
             android:textColor="@color/dark_blue"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/cartButton" />
 
         <TextView
             android:id="@+id/totalTxt"
@@ -309,10 +318,8 @@
             android:text="$0"
             android:textColor="@color/red"
             android:textSize="20sp"
-
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/cartButton"
             app:layout_constraintStart_toStartOf="@+id/textView13"
-            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+            app:layout_constraintBottom_toBottomOf="@+id/cartButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
