@@ -8,26 +8,26 @@ public class Voucher implements Serializable {
     private String discountType;
     private double value;
     private long expiredAt;
-    private boolean used;
+    private String name;
+    private String type;
 
-    @Override
-    public String toString() {
-        return "Voucher{" +
-                "code='" + code + '\'' +
-                ", discountType='" + discountType + '\'' +
-                ", value=" + value +
-                ", expiredAt=" + expiredAt +
-                ", used=" + used +
-                '}';
+    public String getType() {
+        return type;
     }
 
-    public Voucher(String code, String discountType, double value, long expiredAt, boolean used) {
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Voucher(String code, String discountType, double value, long expiredAt, String name, String type) {
         this.code = code;
         this.discountType = discountType;
         this.value = value;
         this.expiredAt = expiredAt;
-        this.used = used;
+        this.name = name;
+        this.type = type;
     }
+
 
     public String getCode() {
 
@@ -64,12 +64,12 @@ public class Voucher implements Serializable {
         this.expiredAt = expiredAt;
     }
 
-    public boolean isUsed() {
-        return used;
+    public String getName() {
+        return name;
     }
 
-    public void setUsed(boolean used) {
-        this.used = used;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Voucher() {

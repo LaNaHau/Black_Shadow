@@ -77,31 +77,49 @@ public class RegisterActivity extends BaseActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             String userId = mAuth.getCurrentUser().getUid();
-
                             User user = new User(userName, fullName, userId, email, phone);
-
-
-
+                            user.setCreatedAt(System.currentTimeMillis());
                             saveUserToDatabase(user);
+                            createVoucher();
                         } else {
                             Toast.makeText(this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             Log.e("AuthError", task.getException().getMessage());
                         }
                     });
+
+            startActivity(new Intent(this, LoginActivity.class));
         });
     }
+
     private void saveUserToDatabase(User user) {
         firebaseDatabase.getReference("Users")
                 .child(user.getUserId())
                 .setValue(user)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Đăng ký thành công!",
+                            Toast.LENGTH_SHORT).show();
 
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(RegisterActivity.this, "Lỗi lưu thông tin người dùng: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "Lỗi lưu thông tin người dùng: " +
+                            e.getMessage(), Toast.LENGTH_LONG).show();
                 });
+
     }
 
+    private void createVoucher() {
+        DatabaseReference voucherRef = firebaseDatabase.getReference("vouchers");
+        String uid = mAuth.getCurrentUser().getUid();
+
+        // Tạo voucher freeship
+        String voucherId1 = voucherRef.push().getKey();
+        Voucher freeshipVoucher = new Voucher(voucherId1, "", 10000, System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000, "FS-WELCOME", "freeship"); // hết hạn sau 7 ngày
+        voucherRef.child(uid).child(voucherId1).setValue(freeshipVoucher);
+
+        // Tạo voucher giảm giá 20%
+        String voucherId2 = voucherRef.push().getKey();
+        Voucher discountVoucher = new Voucher(voucherId2, "percent", 20, System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000, "DISC-WELCOME", "discount");
+        voucherRef.child(uid).child(voucherId2).setValue(discountVoucher);
+    }
 
 }

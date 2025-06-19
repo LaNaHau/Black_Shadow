@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Glide;
 import com.example.appfood.Domain.Order;
 import com.example.appfood.Domain.Voucher;
@@ -15,6 +17,10 @@ import com.example.appfood.R;
 import com.example.appfood.Utils.CustomIdGeneratorUtils;
 import com.example.appfood.Utils.QRCodeUtils;
 import com.example.appfood.databinding.ActivityPaymentMethodBinding;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.WriterException;
 
 import java.io.UnsupportedEncodingException;
@@ -181,6 +187,8 @@ public class PaymentMethodActivity extends BaseActivity {
                 .addOnFailureListener(e ->
                         showToast("Lỗi khi lưu đơn hàng: " + e.getMessage())
                 );
+
+        createVoucher();
     }
 
     private String buildQRContent(Order order) {
@@ -205,6 +213,35 @@ public class PaymentMethodActivity extends BaseActivity {
             qrCountdownTimer.cancel();
             qrCountdownTimer = null;
         }
+    }
+
+    private void createVoucher(){
+        String uid = mAuth.getCurrentUser().getUid();
+        DatabaseReference voucherRef = firebaseDatabase.getReference("vouchers");
+
+        DatabaseReference userOrdersRef = firebaseDatabase.getReference("orders").child(uid);
+        userOrdersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long orderCount = snapshot.getChildrenCount();
+                if (orderCount == 5 || orderCount == 10 || orderCount == 20) { // ví dụ mốc tặng
+                    String voucherId = voucherRef.push().getKey();
+                    Voucher bonusVoucher = new Voucher(voucherId,"percent",
+                            15,
+                            System.currentTimeMillis() + 5L * 24 * 60 * 60 * 1000,
+                            "DISC-THANKS",
+                            "discount"
+                    );
+                    voucherRef.child(uid).child(voucherId).setValue(bonusVoucher);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Voucher", "Failed to read orders: " + error.getMessage());
+
+            }
+        });
     }
 }
 

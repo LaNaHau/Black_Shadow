@@ -72,9 +72,9 @@ public class VoucherActivity extends BaseActivity{
                 for (DataSnapshot data : snapshot.getChildren()) {
                     Voucher voucher = data.getValue(Voucher.class);
                     if (voucher != null) {
-                        if ("discount".equalsIgnoreCase(voucher.getDiscountType())) {
+                        if ("discount".equalsIgnoreCase(voucher.getType())) {
                             discountVouchers.add(voucher);
-                        } else if ("freeship".equalsIgnoreCase(voucher.getDiscountType())) {
+                        } else if ("freeship".equalsIgnoreCase(voucher.getType())) {
                             freeshipVouchers.add(voucher);
                         }
                     }

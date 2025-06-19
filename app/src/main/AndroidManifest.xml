@@ -52,10 +52,19 @@
             android:name=".Activities.BaseActivity"
             android:exported="false" />
         <activity
+            android:name=".Activities.OrderListActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.MainActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.EditPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.IntroActivity"

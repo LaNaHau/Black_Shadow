@@ -74,18 +74,18 @@
                     .transform(new CenterCrop(), new RoundedCorners(60))
                     .into(binding.pic);
 
-            binding.priceTxt.setText("$" + object.getPrice());
+            binding.priceTxt.setText(object.getPrice() + " VND");
             binding.titleTxt.setText(object.getTitle());
             binding.descriptionTxt.setText(object.getDescription());
             binding.ratingTxt.setText(object.getStar() + " Rating");
             binding.ratingBar.setRating((float) object.getStar());
-            binding.totalTxt.setText((num * object.getPrice()) + "$");
+            binding.totalTxt.setText((num * object.getPrice())+ " VND");
 
             binding.plusBtn.setOnClickListener(v -> {
                 num = num + 1;
                 Log.d(TAG, "Increased quantity: " + num);
                 binding.numTxt.setText(String.valueOf(num));
-                binding.totalTxt.setText("$" + (num * object.getPrice()));
+                binding.totalTxt.setText((num * object.getPrice()) + " VND");
             });
 
             binding.minusBtn.setOnClickListener(v -> {
@@ -93,7 +93,7 @@
                     num = num - 1;
 
                     binding.numTxt.setText(String.valueOf(num));
-                    binding.totalTxt.setText("$" + (num * object.getPrice()));
+                    binding.totalTxt.setText( (num * object.getPrice()) + " VND");
                 }
             });
 
@@ -109,7 +109,7 @@
         private void setupFavoriteButton() {
             ImageView favoBtn = findViewById(R.id.favoBtn);
 
-            checkIfFavorite(favoBtn); // Nếu có hàm kiểm tra ban đầu thì giữ
+            checkIfFavorite(favoBtn);
 
             favoBtn.setOnClickListener(v -> {
                 if (object != null) {

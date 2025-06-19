@@ -46,7 +46,7 @@ public class FoodLisAdapter extends RecyclerView.Adapter<FoodLisAdapter.viewhole
 
             holder.titleTxt.setText(item.getTitle());
             holder.timeTxt.setText(item.getTimeValue() + " min");
-            holder.priceTxt.setText("$" + item.getPrice());
+            holder.priceTxt.setText( String.format("%.0f", item.getPrice()) + " VND");
             holder.rateTxt.setText(String.valueOf(item.getStar()));
 
             Log.d(TAG, "Binding item: " + item.getTitle() + " | Price: " + item.getPrice());

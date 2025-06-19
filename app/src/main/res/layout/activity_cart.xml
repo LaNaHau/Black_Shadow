@@ -251,8 +251,8 @@
                         android:text="Total Tax"
                         android:textColor="@color/dark_blue"
                         android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="@+id/textView11"
-                        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                        app:layout_constraintStart_toStartOf="@+id/textView15"
+                        app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
                     <TextView
                         android:id="@+id/deliveryTxt"
@@ -266,13 +266,15 @@
                         app:layout_constraintTop_toBottomOf="@+id/totalFeeTxt" />
 
                     <TextView
-                        android:id="@+id/taxTxt"
+                        android:id="@+id/freeshipTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="$-"
-                        android:textColor="@color/dark_blue"
+                        android:textColor="@color/red"
+
                         android:textSize="20sp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="@+id/deliveryTxt"
                         app:layout_constraintTop_toBottomOf="@+id/deliveryTxt" />
 
@@ -313,6 +315,53 @@
                         app:layout_constraintBottom_toBottomOf="@+id/textView16"
                         app:layout_constraintEnd_toEndOf="@+id/view2"
                         app:layout_constraintTop_toTopOf="@+id/textView16" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Freeship"
+                        android:textColor="@color/red"
+                        android:textSize="20sp"
+
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="@+id/textView11"
+                        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+                    <TextView
+                        android:id="@+id/taxTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="$-"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="@+id/discountTxt"
+                        app:layout_constraintTop_toBottomOf="@+id/discountTxt" />
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Discount"
+                        android:textColor="@color/red"
+                        android:textSize="20sp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="@+id/textView4"
+                        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+                    <TextView
+                        android:id="@+id/discountTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="$-"
+                        android:textColor="@color/red"
+                        android:textSize="20sp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="@+id/freeshipTxt"
+                        app:layout_constraintTop_toBottomOf="@+id/freeshipTxt" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.AppCompatButton

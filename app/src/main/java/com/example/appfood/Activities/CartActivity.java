@@ -140,43 +140,67 @@ public class CartActivity extends BaseActivity {
 
     private void calculateCart() {
         double itemTotal = managmentCart.getTotalFee();
-        double delivery = 10;
+        double delivery = 10000;
         double discountAmount = 0;
 
-        if (selectedDiscountVoucher != null) {
-            if ("percent".equalsIgnoreCase(selectedDiscountVoucher.getDiscountType())) {
+        // Xử lý voucher giảm giá
+        if (selectedDiscountVoucher != null &&
+                "discount".equalsIgnoreCase(selectedDiscountVoucher.getType())) {
+
+            String discountType = selectedDiscountVoucher.getDiscountType();
+            if ("percent".equalsIgnoreCase(discountType)) {
                 discountAmount = itemTotal * (selectedDiscountVoucher.getValue() / 100.0);
-            } else if ("amount".equalsIgnoreCase(selectedDiscountVoucher.getDiscountType())) {
+            } else if ("amount".equalsIgnoreCase(discountType)) {
                 discountAmount = selectedDiscountVoucher.getValue();
             }
+
+            // Hiển thị Discount
+            binding.discountTxt.setText("-" + String.format("%.0f", discountAmount) + " VND");
+            binding.discountTxt.setVisibility(View.VISIBLE);
+            binding.textView15.setVisibility(View.VISIBLE);
+        } else {
+            binding.discountTxt.setVisibility(View.GONE);
+            binding.textView15.setVisibility(View.GONE);
         }
 
         itemTotal = Math.max(0, itemTotal - discountAmount);
 
-        if (selectedFreeshipVoucher != null) delivery = 0;
+        // Xử lý freeship
+        if (selectedFreeshipVoucher != null &&
+                "freeship".equalsIgnoreCase(selectedFreeshipVoucher.getType())) {
+
+            double freeshipAmount = selectedFreeshipVoucher.getValue();
+            delivery = Math.max(0, delivery - freeshipAmount);
+
+            // Hiển thị Freeship
+            binding.freeshipTxt.setText("-" + String.format("%.0f", freeshipAmount) + " VND");
+            binding.freeshipTxt.setVisibility(View.VISIBLE);
+            binding.textView4.setVisibility(View.VISIBLE);
+        } else {
+            binding.freeshipTxt.setVisibility(View.GONE);
+            binding.textView4.setVisibility(View.GONE);
+        }
+
         double tax = itemTotal * 0.02;
         double total = itemTotal + tax + delivery;
-        // Debug log
-        Log.d("DEBUG_CART", "Subtotal: " + itemTotal);
-        Log.d("DEBUG_CART", "Discount: " + discountAmount);
-        Log.d("DEBUG_CART", "Tax: " + tax);
-        Log.d("DEBUG_CART", "Delivery: " + delivery);
-        Log.d("DEBUG_CART", "Total: " + total);
 
-        binding.totalFeeTxt.setText("$" + String.format("%.2f", itemTotal));
-        binding.taxTxt.setText("$" + String.format("%.2f", tax));
-        binding.deliveryTxt.setText("- $" + String.format("%.2f", delivery));
-        binding.totalTxt.setText(String.format("%.2f", total)+ " VND");
+        // Cập nhật các thành phần UI chính
+        binding.totalFeeTxt.setText(String.format("%.0f", itemTotal) + " VND");
+        binding.taxTxt.setText(String.format("%.0f", tax) + " VND");
+        binding.deliveryTxt.setText( "10000 VND");
+        binding.totalTxt.setText(String.format("%.0f", total) + " VND");
 
-        // Cập nhật UI voucher
+        // Ghi voucher đã chọn
         String voucherText = "";
         if (selectedDiscountVoucher != null)
-            voucherText += "Giảm: " + selectedDiscountVoucher.getCode();
+            voucherText += "Giảm: " + selectedDiscountVoucher.getType();
         if (selectedFreeshipVoucher != null)
             voucherText += (voucherText.isEmpty() ? "" : " | ") + "Freeship";
 
         binding.VoucherTxt.setText(voucherText.isEmpty() ? "Chọn mã giảm giá" : voucherText);
     }
+
+
 
     private void loadUserInfo() {
         FirebaseUser currentUser = mAuth.getCurrentUser();

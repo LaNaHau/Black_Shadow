@@ -80,10 +80,14 @@ public class ProfileActivity extends BaseActivity {
                         String avatarUrl = snapshot.child("avatar").getValue(String.class);
 
                         if (user != null) {
+                            String address = user.getAddress() != null && !user.getAddress().toString().isEmpty()
+                                    ? user.getAddress().toString() : "Chưa cập nhật";
+                            binding.passText.setText("********");
                             binding.nameTxt.setText(user.getUserName());
                             binding.emailTxt.setText(user.getEmail());
                             binding.tellTxt.setText(user.getPhone());
                             binding.mobileTxt.setText(user.getPhone());
+                            binding.addressTxt.setText(address);
 
                             if (avatarUrl != null && !avatarUrl.isEmpty()) {
                                 Glide.with(ProfileActivity.this)
@@ -109,8 +113,14 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void setAvailable() {
+        binding.passEdit.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, EditPasswordActivity.class);
+            startActivity(intent);
+        });
+
         binding.editProfileBtn.setOnClickListener(v -> {
-            // Future: mở EditProfileActivity
+            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+            startActivity(intent);
         });
 
         binding.logoutBtn.setOnClickListener(v -> {
@@ -129,6 +139,11 @@ public class ProfileActivity extends BaseActivity {
 
         binding.backBtn.setOnClickListener(v ->
                 startActivity(new Intent(ProfileActivity.this, MainActivity.class)));
+
+        binding.orderHistoryLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, OrderListActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -224,7 +239,7 @@ public class ProfileActivity extends BaseActivity {
         }
         return byteBuffer.toByteArray();
     }
-
+    // dark mode
     private void setupDarkModeSwitch() {
         binding.darkModeSwitch.setChecked(
                 getSharedPreferences("settings", MODE_PRIVATE).getBoolean("dark_mode", false)

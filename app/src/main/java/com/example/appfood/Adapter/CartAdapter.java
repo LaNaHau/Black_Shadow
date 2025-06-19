@@ -46,7 +46,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
 
         holder.title.setText(item.getTitle());
         double fee = item.getNumberInCart() * item.getPrice();
-        holder.feeEachItem.setText("$" + String.format("%.2f", fee));
+        holder.feeEachItem.setText( String.format("%.0f", fee) + " VND");
         holder.num.setText(item.getNumberInCart() + "");
         Glide.with(holder.itemView.getContext())
                 .load(item.getImagePath())

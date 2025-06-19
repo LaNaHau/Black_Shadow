@@ -3,10 +3,13 @@ package com.example.appfood.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.appfood.Domain.User;
+import com.example.appfood.Domain.Voucher;
 import com.example.appfood.R;
 import com.example.appfood.Utils.Utils;
 import com.example.appfood.databinding.ActivityLoginBinding;
@@ -20,6 +23,14 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Calendar;
 
 public class LoginActivity extends BaseActivity {
 
@@ -86,6 +97,8 @@ public class LoginActivity extends BaseActivity {
                                     // Xoá thông tin cũ nếu không muốn lưu
                                     getSharedPreferences("login_prefs", MODE_PRIVATE).edit().clear().apply();
                                 }
+                                String uid = mAuth.getCurrentUser().getUid();
+                                checkAndGiftFreeshipVoucher(uid);
 
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
@@ -95,6 +108,7 @@ public class LoginActivity extends BaseActivity {
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
+
             } else {
                 if (!isEmailValid) {
                     binding.editEmail.setError("Mail đăng nhập không hợp lệ");
@@ -161,4 +175,47 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
     }
+
+    private void checkAndGiftFreeshipVoucher(String uid) {
+        DatabaseReference userRef = firebaseDatabase  .getReference("Users").child(uid);
+        DatabaseReference voucherRef = firebaseDatabase  .getReference("Vouchers").child(uid);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                if (user == null || user.getCreatedAt() == 0) return;
+
+                long currentTime = System.currentTimeMillis();
+                long daysSinceJoin = (currentTime - user.getCreatedAt()) / (1000 * 60 * 60 * 24);
+
+                Calendar calendar = Calendar.getInstance();
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH) + 1;
+
+                // --- Điều kiện đủ 30 ngày ---
+                if (daysSinceJoin >= 30) {
+                    // Có thể thêm điều kiện chưa từng nhận freeship loyalty
+                    String voucherId = voucherRef.push().getKey();
+                    Voucher voucher = new Voucher(voucherId, "", 10000,
+                            currentTime + 5L * 24 * 60 * 60 * 1000, "FS-LOYALTY", "freeship");
+                    voucherRef.child(voucherId).setValue(voucher);
+                }
+
+                // --- Điều kiện ngày cố định ---
+                if ((day == 1 && month == 7) || (day == 20 && month == 11)) {
+                    String voucherId = voucherRef.push().getKey();
+                    Voucher voucher = new Voucher(voucherId, "", 10000,
+                            currentTime + 3L * 24 * 60 * 60 * 1000, "FS-EVENT", "freeship");
+                    voucherRef.child(voucherId).setValue(voucher);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Voucher", "Lỗi kiểm tra hoạt động: " + error.getMessage());
+            }
+        });
+    }
+
 }
