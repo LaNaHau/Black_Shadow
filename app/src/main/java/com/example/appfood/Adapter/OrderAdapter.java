@@ -19,9 +19,12 @@ import com.bumptech.glide.Glide;
 import com.example.appfood.Domain.Foods;
 import com.example.appfood.Domain.Order;
 import com.example.appfood.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -29,13 +32,31 @@ import java.util.Locale;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 
     private static final String TAG = "OrderAdapter";
+
     private Context context;
     private List<Order> orderList;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
-
+    private List<Order> filteredOrderList;
+    private FirebaseUser currentUser;
     public OrderAdapter(Context context, List<Order> orderList) {
         this.context = context;
-        this.orderList = orderList;
+        this.orderList = orderList != null ? orderList : new ArrayList<>();
+        this.filteredOrderList = new ArrayList<>();
+        this.currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        filterOrdersByCurrentUser(); // Lọc danh sách khi khởi tạo
+    }
+
+    private void filterOrdersByCurrentUser() {
+        filteredOrderList.clear();
+        if (currentUser != null && orderList != null) {
+            String userId = currentUser.getUid();
+            for (Order order : orderList) {
+                if (order != null && userId.equals(order.getUserId())) {
+                    filteredOrderList.add(order);
+                }
+            }
+        }
+        Log.d(TAG, "Filtered orders for user " + (currentUser != null ? currentUser.getUid() : "null") + ": " + filteredOrderList.size());
     }
 
     @NonNull
@@ -116,13 +137,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             if ("COD - Pending".equalsIgnoreCase(status) || ("Paid via QR".equalsIgnoreCase(status) )) {
                 holder.cancelButton.setVisibility(View.VISIBLE);
             }
-        } else if ("COD - Pending".equalsIgnoreCase(status)) {
+        } else if ("COD - Pending".equalsIgnoreCase(status) || ("Paid via QR".equalsIgnoreCase(status) )) {
             holder.receivedButton.setVisibility(View.VISIBLE);
         }
 
         // Handle Cancel button click to update status
         holder.cancelButton.setOnClickListener(v -> {
             FirebaseDatabase.getInstance().getReference("orders")
+                    .child(currentUser.getUid())
                     .child(order.getOrderId())
                     .child("status")
                     .setValue("Canceled")
@@ -142,6 +164,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         // Handle Received button click to update status
         holder.receivedButton.setOnClickListener(v -> {
             FirebaseDatabase.getInstance().getReference("orders")
+                    .child(currentUser.getUid())
                     .child(order.getOrderId())
                     .child("status")
                     .setValue("Completed")

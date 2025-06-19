@@ -17,6 +17,7 @@ import com.example.appfood.R;
 import com.example.appfood.Utils.CustomIdGeneratorUtils;
 import com.example.appfood.Utils.QRCodeUtils;
 import com.example.appfood.databinding.ActivityPaymentMethodBinding;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -172,8 +173,19 @@ public class PaymentMethodActivity extends BaseActivity {
     }
 
     private void saveOrderToFirebase(Order order, boolean finishAfter) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            showToast("Chưa đăng nhập");
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        String orderId = order.getOrderId();
+
+        // Lưu đơn hàng theo cấu trúc: orders/userId/orderId
         firebaseDatabase.getReference("orders")
-                .child(order.getOrderId())
+                .child(userId)
+                .child(orderId)
                 .setValue(order)
                 .addOnSuccessListener(aVoid -> {
                     showToast("Đơn hàng đã được lưu!");
@@ -190,6 +202,7 @@ public class PaymentMethodActivity extends BaseActivity {
 
         createVoucher();
     }
+
 
     private String buildQRContent(Order order) {
         String paymentNote = "Thanh toan " + order.getOrderId();

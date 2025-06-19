@@ -1,18 +1,20 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorPrimary">
+    android:background="#3DB1B1A3"
+    android:layout_height="match_parent">
 
     <TextView
-        android:text="Chọn phương thức thanh toán"
-        android:textSize="18sp"
-        android:layout_marginBottom="12dp"
         android:layout_width="wrap_content"
-        android:textColor="?attr/colorOnSurface"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_gravity="center"
+        android:text="Chọn phương thức thanh toán"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <RadioGroup
         android:id="@+id/radioGroupPayment"
@@ -23,15 +25,17 @@
             android:id="@+id/radioCOD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:buttonTint="@color/red_500"
             android:text="Thanh toán khi nhận hàng (COD)"
-            android:textColor="?attr/colorOnSurface"/>
+            />
 
         <RadioButton
             android:id="@+id/radioQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:buttonTint="@color/red_500"
             android:text="Thanh toán qua mã QR"
-            android:textColor="?attr/colorOnSurface"/>
+            />
     </RadioGroup>
 
     <ImageView
@@ -46,17 +50,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tôi đã thanh toán"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/black"
         android:visibility="gone"
         />
 
     <Button
         android:id="@+id/btnConfirm"
-        android:text="Xác nhận thanh toán"
-        android:textColor="?attr/colorOnSurface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_gravity="center"
+        app:background="@color/colorPrimary"
+        android:text="Xác nhận thanh toán"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tvQRCountdown"
@@ -64,7 +70,7 @@
         android:layout_height="wrap_content"
         android:text="Thời gian còn lại: 05:00"
         android:textSize="16sp"
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@color/red_500"
         android:layout_marginTop="8dp"
         android:visibility="gone"/>
 

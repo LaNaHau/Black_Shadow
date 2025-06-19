@@ -1,5 +1,8 @@
 package com.example.appfood.Activities;
 
+import static com.example.appfood.Utils.Utils.getDoubleValue;
+import static com.example.appfood.Utils.Utils.getLongValue;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,7 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class OrderListActivity extends AppCompatActivity {
+public class OrderListActivity extends BaseActivity {
     private static final String TAG = "OrderListActivity";
     private ActivityOrderListBinding binding;
     private OrderAdapter orderAdapter;
@@ -69,15 +72,18 @@ public class OrderListActivity extends AppCompatActivity {
     }
 
     private void loadOrderHistory() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
+            String currentUserId = currentUser.getUid();
+            DatabaseReference ordersRef =
+                    firebaseDatabase.getReference("orders").child(currentUserId);
 
             ordersRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     orderList.clear();
-                    Log.d(TAG, "Loading orders from Firebase");
+                    Log.d(TAG, "Loading orders for user: " + currentUserId);
+
                     for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
                         try {
                             String orderId = orderSnapshot.child("orderId").getValue(String.class);
@@ -86,27 +92,20 @@ public class OrderListActivity extends AppCompatActivity {
                                 orderId = orderIdLong != null ? orderIdLong.toString() : "";
                             }
 
-                            String userId = orderSnapshot.child("userId").getValue(String.class);
-                            if (userId == null) {
-                                Long userIdLong = orderSnapshot.child("userId").getValue(Long.class);
-                                userId = userIdLong != null ? userIdLong.toString() : "";
-                            }
-
+                            String userId = currentUserId;
                             String userName = orderSnapshot.child("userName").getValue(String.class);
                             String phone = orderSnapshot.child("phone").getValue(String.class);
                             String address = orderSnapshot.child("address").getValue(String.class);
                             String status = orderSnapshot.child("status").getValue(String.class);
-                            double itemTotal = orderSnapshot.child("itemTotal").getValue(Double.class) != null ? orderSnapshot.child("itemTotal").getValue(Double.class) : 0.0;
-                            double tax = orderSnapshot.child("tax").getValue(Double.class) != null ? orderSnapshot.child("tax").getValue(Double.class) : 0.0;
-                            double deliveryFee = orderSnapshot.child("deliveryFee").getValue(Double.class) != null ? orderSnapshot.child("deliveryFee").getValue(Double.class) : 0.0;
-                            double totalAmount = orderSnapshot.child("totalAmount").getValue(Double.class) != null ? orderSnapshot.child("totalAmount").getValue(Double.class) : 0.0;
-                            double finalTotal = orderSnapshot.child("finalTotal").getValue(Double.class) != null ? orderSnapshot.child("finalTotal").getValue(Double.class) : 0.0;
 
-                            Long orderTimeLong = orderSnapshot.child("orderTime").getValue(Long.class);
-                            long orderTime = orderTimeLong != null ? orderTimeLong : 0L;
+                            double itemTotal = getDoubleValue(orderSnapshot, "itemTotal");
+                            double tax = getDoubleValue(orderSnapshot, "tax");
+                            double deliveryFee = getDoubleValue(orderSnapshot, "deliveryFee");
+                            double totalAmount = getDoubleValue(orderSnapshot, "totalAmount");
+                            double finalTotal = getDoubleValue(orderSnapshot, "finalTotal");
 
-                            Long paymentConfirmTimeLong = orderSnapshot.child("paymentConfirmTime").getValue(Long.class);
-                            long paymentConfirmTime = paymentConfirmTimeLong != null ? paymentConfirmTimeLong : 0L;
+                            long orderTime = getLongValue(orderSnapshot, "orderTime");
+                            long paymentConfirmTime = getLongValue(orderSnapshot, "paymentConfirmTime");
 
                             List<Foods> foodList = new ArrayList<>();
                             DataSnapshot foodListSnapshot = orderSnapshot.child("foodList");
@@ -120,28 +119,27 @@ public class OrderListActivity extends AppCompatActivity {
                             Order order = new Order(orderId, userId, userName, phone, address, foodList,
                                     itemTotal, tax, deliveryFee, totalAmount, orderTime, status,
                                     paymentConfirmTime, finalTotal);
+
                             orderList.add(order);
                             Log.d(TAG, "Loaded order: " + orderId + ", Status: " + status);
+
                         } catch (Exception e) {
                             Log.e(TAG, "Error processing order: " + orderSnapshot.getKey(), e);
                         }
                     }
 
-                    // Sort list by orderTime descending (newest first)
-                    Collections.sort(orderList, new Comparator<Order>() {
-                        @Override
-                        public int compare(Order o1, Order o2) {
-                            return Long.compare(o2.getOrderTime(), o1.getOrderTime());
-                        }
-                    });
+                    // Sort by orderTime descending
+                    Collections.sort(orderList, (o1, o2) ->
+                            Long.compare(o2.getOrderTime(), o1.getOrderTime()));
 
                     if (binding.orderRecyclerView != null) {
                         orderAdapter.notifyDataSetChanged();
                         Log.d(TAG, "Notified adapter with " + orderList.size() + " orders");
                     }
+
                     if (orderList.isEmpty()) {
                         Toast.makeText(OrderListActivity.this, "No orders available", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "No orders found");
+                        Log.d(TAG, "No orders found for user");
                     }
                 }
 
@@ -151,10 +149,12 @@ public class OrderListActivity extends AppCompatActivity {
                     Log.e(TAG, "Firebase query cancelled: " + error.getMessage());
                 }
             });
+
         } else {
             Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
             finish();
             Log.d(TAG, "User not logged in, finishing activity");
         }
     }
+
 }

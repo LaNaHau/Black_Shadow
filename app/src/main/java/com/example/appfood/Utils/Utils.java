@@ -3,6 +3,8 @@ package com.example.appfood.Utils;
 import android.util.Patterns;
 import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+
 public class Utils {
 
     public static boolean inputValidation(EditText input) {
@@ -23,5 +25,15 @@ public class Utils {
     public static boolean isValidPassword(EditText input) {
         String password = input.getText().toString().trim();
         return password.length() >= 6; // tối thiểu 6 ký tự
+    }
+
+    public static double getDoubleValue(DataSnapshot snapshot, String key) {
+        Double value = snapshot.child(key).getValue(Double.class);
+        return value != null ? value : 0.0;
+    }
+
+    public static long getLongValue(DataSnapshot snapshot, String key) {
+        Long value = snapshot.child(key).getValue(Long.class);
+        return value != null ? value : 0L;
     }
 }

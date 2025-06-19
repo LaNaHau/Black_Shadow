@@ -3,12 +3,10 @@
     android:id="@+id/voucherRootLayout"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#FAFAFA"
+    android:background="@drawable/white_bg"
     android:layout_width="match_parent"
-    android:backgroundTint="?attr/colorPrimary"
     android:layout_height="match_parent">
 
-    <!-- Tiêu đề -->
     <TextView
         android:id="@+id/voucherTitle"
         android:layout_width="match_parent"
