@@ -5,6 +5,7 @@
     android:padding="16dp"
     android:background="#FAFAFA"
     android:layout_width="match_parent"
+    android:backgroundTint="?attr/colorPrimary"
     android:layout_height="match_parent">
 
     <!-- Tiêu đề -->
@@ -13,11 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Danh sách voucher"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:padding="12dp"
-        android:textColor="#000000" />
+        android:padding="12dp" />
 
     <ScrollView
         android:layout_width="match_parent"

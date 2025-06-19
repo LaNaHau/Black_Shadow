@@ -1,10 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.FoodApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Dark theme colors -->
-        <item name="colorPrimary">@color/red_200</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="colorSurface">@color/black</item>
-        <!--        <item name="colorBackground">@color/black</item>-->
+        <item name="colorPrimary">#574C4B</item>
+        <item name="colorOnPrimary">#3F5B6B</item>
+        <item name="colorSurface">@color/dark_blue</item>
+        <item name="android:windowBackground">@color/dark_blue</item>
         <item name="colorOnBackground">@color/white</item>
         <item name="colorOnSurface">@color/white</item>
     </style>

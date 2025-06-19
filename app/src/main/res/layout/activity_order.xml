@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
     android:padding="16dp">
 
     <LinearLayout
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="Thông tin đặt hàng"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -30,12 +32,14 @@
             android:id="@+id/edtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
             android:hint="Họ và tên" />
 
         <EditText
             android:id="@+id/edtPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
             android:hint="Số điện thoại"
             android:inputType="phone" />
 
@@ -43,6 +47,7 @@
             android:id="@+id/edtAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
             android:hint="Địa chỉ giao hàng" />
 
 
@@ -52,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:textColor="?attr/colorOnSurface"
             android:text="Tổng tiền: 0đ"
             android:textSize="16sp" />
 
@@ -59,6 +65,7 @@
             android:id="@+id/txtDiscount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
             android:text="Giảm giá: 0đ"
             android:textSize="16sp" />
 

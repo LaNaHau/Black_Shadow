@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF1F7"
+    android:background="?attr/colorPrimary"
     android:fillViewport="true">
 
     <LinearLayout
@@ -32,8 +32,9 @@
             android:text="Tam"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
             android:layout_marginTop="12dp"
-            android:textColor="#000" />
+            />
 
         <TextView
             android:id="@+id/emailTextView"
@@ -41,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="daoduytam2022@gmail.com"
             android:textSize="16sp"
-            android:textColor="#666"
+            android:textColor="?attr/colorOnSurface"
             android:layout_marginTop="4dp" />
 
         <!-- Khối thông tin -->
@@ -72,6 +73,7 @@
                 android:hint="Nhập tên"
                 android:inputType="text"
                 android:minHeight="48dp"
+                android:textColor="@color/dark_blue"
                 android:paddingVertical="12dp" />
 
             <!-- Tell -->
@@ -87,6 +89,7 @@
                 android:hint="Nhập số điện thoại"
                 android:inputType="phone"
                 android:minHeight="48dp"
+                android:textColor="@color/dark_blue"
                 android:paddingVertical="12dp" />
 
             <!-- Address -->
@@ -102,6 +105,7 @@
                 android:hint="Nhập địa chỉ"
                 android:inputType="textPostalAddress"
                 android:minHeight="48dp"
+                android:textColor="@color/dark_blue"
                 android:paddingVertical="12dp" />
 
         </LinearLayout>

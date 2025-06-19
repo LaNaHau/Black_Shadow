@@ -96,7 +96,7 @@
                         android:layout_marginTop="60dp"
                         android:layout_marginEnd="24dp"
                         android:layout_marginBottom="24dp"
-                        android:background="@drawable/white_bg_full_corner"
+                        android:background="?attr/colorSurface"
                         android:elevation="3dp"
                         android:orientation="vertical"
                         android:paddingBottom="10dp"
@@ -295,7 +295,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Password"
-                                android:textColor="@color/dark_blue"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -304,6 +304,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="********"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textAlignment="textEnd"
                                 android:textSize="16sp" />
 
@@ -328,7 +329,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Mobile"
-                                android:textColor="@color/dark_blue"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -338,6 +339,7 @@
                                 android:layout_weight="1"
                                 android:text="123 - 456 - 7895"
                                 android:textAlignment="textEnd"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -360,7 +362,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Tell"
-                                android:textColor="@color/dark_blue"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -369,6 +371,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="123 - 456 - 7895"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textAlignment="textEnd"
                                 android:textSize="16sp" />
 
@@ -392,7 +395,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Address"
-                                android:textColor="@color/dark_blue"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -402,6 +405,7 @@
                                 android:layout_weight="1"
                                 android:text="HCM"
                                 android:textAlignment="textEnd"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -413,30 +417,31 @@
                             android:layout_margin="10dp"
                             android:background="#d9d9d9" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:orientation="horizontal">
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_margin="10dp"-->
+<!--                            android:orientation="horizontal">-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Contact"
-                                android:textColor="@color/dark_blue"
-                                android:textSize="16sp" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:text="Contact"-->
+<!--                                android:textColor="?attr/colorOnSurface"-->
+<!--                                android:textSize="16sp" />-->
 
-                            <TextView
-                                android:id="@+id/contactTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="With me"
-                                android:textAlignment="textEnd"
-                                android:textSize="16sp" />
+<!--                            <TextView-->
+<!--                                android:id="@+id/contactTxt"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:text="With me"-->
+<!--                                android:textAlignment="textEnd"-->
+<!--                                android:textColor="?attr/colorOnSurface"-->
+<!--                                android:textSize="16sp" />-->
 
-                        </LinearLayout>
+<!--                        </LinearLayout>-->
 
                         <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/darkModeSwitch"

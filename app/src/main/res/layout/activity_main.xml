@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/yellow"
+    android:background="?attr/colorPrimary"
     tools:context=".Activities.MainActivity">
 
     <ScrollView
@@ -45,7 +45,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="Welcom"
+                    android:text="Welcome"
+                    android:textColor="?attr/colorOnSurface"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,6 +57,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="4dp"
                     android:text="SanSan"
+                    android:textColor="?attr/colorOnSurface"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -108,15 +110,15 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/white_bg"
+                android:background="?attr/colorSurface"
                 android:drawableStart="@drawable/search_icon"
                 android:drawablePadding="8dp"
                 android:ems="10"
                 android:hint="Bạn muốn ăn gì hôm nay?"
                 android:inputType="text"
                 android:padding="8dp"
-                android:textColor="@color/dark_blue"
-                android:textColorHint="@color/dark_blue"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurface"
                 android:textSize="14sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -161,14 +163,14 @@
         android:id="@+id/bottomMenu"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         android:padding="4dp"
         app:cnb_iconSize="20dp"
         app:cnb_menuResource="@menu/bottom_menu"
         app:cnb_orientationMode="horizontal"
         app:cnb_radius="10dp"
 
-        app:cnb_unselectedColor="@color/dark_blue"
+        app:cnb_unselectedColor="?attr/colorOnSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

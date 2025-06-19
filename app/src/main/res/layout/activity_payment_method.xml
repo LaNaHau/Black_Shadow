@@ -3,13 +3,15 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary">
 
     <TextView
         android:text="Chọn phương thức thanh toán"
         android:textSize="18sp"
         android:layout_marginBottom="12dp"
         android:layout_width="wrap_content"
+        android:textColor="?attr/colorOnSurface"
         android:layout_height="wrap_content" />
 
     <RadioGroup
@@ -21,13 +23,15 @@
             android:id="@+id/radioCOD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thanh toán khi nhận hàng (COD)" />
+            android:text="Thanh toán khi nhận hàng (COD)"
+            android:textColor="?attr/colorOnSurface"/>
 
         <RadioButton
             android:id="@+id/radioQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thanh toán qua mã QR" />
+            android:text="Thanh toán qua mã QR"
+            android:textColor="?attr/colorOnSurface"/>
     </RadioGroup>
 
     <ImageView
@@ -42,12 +46,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tôi đã thanh toán"
+        android:textColor="?attr/colorOnSurface"
         android:visibility="gone"
         />
 
     <Button
         android:id="@+id/btnConfirm"
         android:text="Xác nhận thanh toán"
+        android:textColor="?attr/colorOnSurface"
         android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
