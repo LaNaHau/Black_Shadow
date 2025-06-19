@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appfood.Domain.Voucher;
 import com.example.appfood.R;
+import com.example.appfood.Utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,7 +59,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
             holder.typeText.setText("Loại: " + type);
         }
 
-        holder.valueText.setText("Giảm: $" + String.format("%.2f", voucher.getValue()));
+        holder.valueText.setText(Utils.formatCurrency(voucher.getValue()));
         holder.expireText.setText("HSD: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date(voucher.getExpiredAt())));
 
         holder.selectRadio.setChecked(position == selectedPosition);
@@ -72,8 +73,6 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
                 }
             }
         });
-
-        // Click vào item cũng chọn được (UX tốt hơn)
         holder.itemView.setOnClickListener(v -> holder.selectRadio.performClick());
     }
 

@@ -1,5 +1,7 @@
 package com.example.appfood.Activities;
 
+import static com.example.appfood.Utils.Utils.formatCurrency;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -155,7 +157,7 @@ public class CartActivity extends BaseActivity {
             }
 
             // Hiển thị Discount
-            binding.discountTxt.setText("-" + String.format("%.0f", discountAmount) + " VND");
+            binding.discountTxt.setText("-" + formatCurrency(discountAmount));
             binding.discountTxt.setVisibility(View.VISIBLE);
             binding.textView15.setVisibility(View.VISIBLE);
         } else {
@@ -173,7 +175,7 @@ public class CartActivity extends BaseActivity {
             delivery = Math.max(0, delivery - freeshipAmount);
 
             // Hiển thị Freeship
-            binding.freeshipTxt.setText("-" + String.format("%.0f", freeshipAmount) + " VND");
+            binding.freeshipTxt.setText("-" + formatCurrency(freeshipAmount));
             binding.freeshipTxt.setVisibility(View.VISIBLE);
             binding.textView4.setVisibility(View.VISIBLE);
         } else {
@@ -185,10 +187,10 @@ public class CartActivity extends BaseActivity {
         double total = itemTotal + tax + delivery;
 
         // Cập nhật các thành phần UI chính
-        binding.totalFeeTxt.setText(String.format("%.0f", itemTotal) + " VND");
-        binding.taxTxt.setText(String.format("%.0f", tax) + " VND");
-        binding.deliveryTxt.setText( "10000 VND");
-        binding.totalTxt.setText(String.format("%.0f", total) + " VND");
+        binding.totalFeeTxt.setText(formatCurrency(managmentCart.getTotalFee()));
+        binding.taxTxt.setText(formatCurrency(tax));
+        binding.deliveryTxt.setText( formatCurrency(10000));
+        binding.totalTxt.setText(formatCurrency(total));
 
         // Ghi voucher đã chọn
         String voucherText = "";

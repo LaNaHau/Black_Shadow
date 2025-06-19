@@ -5,6 +5,9 @@ import android.widget.EditText;
 
 import com.google.firebase.database.DataSnapshot;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Utils {
 
     public static boolean inputValidation(EditText input) {
@@ -36,4 +39,10 @@ public class Utils {
         Long value = snapshot.child(key).getValue(Long.class);
         return value != null ? value : 0L;
     }
+
+    public static String formatCurrency(double amount) {
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatter.format(amount) + " VND";
+    }
+
 }

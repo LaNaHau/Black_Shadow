@@ -62,7 +62,7 @@ public class ProfileActivity extends BaseActivity {
 
         loadUserInfo();
         setAvailable();
-        setupDarkModeSwitch(); // ✅ xử lý chuyển đổi dark mode
+        setupDarkModeSwitch(); // xử lý chuyển đổi dark mode
     }
 
     private void loadUserInfo() {
@@ -82,7 +82,7 @@ public class ProfileActivity extends BaseActivity {
                         if (user != null) {
                             String address = user.getAddress() != null && !user.getAddress().toString().isEmpty()
                                     ? user.getAddress().toString() : "Chưa cập nhật";
-                            binding.passText.setText("********");
+//                            binding.passText.setText("********");
                             binding.nameTxt.setText(user.getUserName());
                             binding.emailTxt.setText(user.getEmail());
                             binding.tellTxt.setText(user.getPhone());

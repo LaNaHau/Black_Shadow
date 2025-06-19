@@ -1,5 +1,7 @@
     package com.example.appfood.Activities;
 
+    import static com.example.appfood.Utils.Utils.formatCurrency;
+
     import android.content.Context;
     import android.os.Bundle;
     import android.util.Log;
@@ -78,18 +80,18 @@
                     .transform(new CenterCrop(), new RoundedCorners(60))
                     .into(binding.pic);
 
-            binding.priceTxt.setText(object.getPrice() + " VND");
+            binding.priceTxt.setText(formatCurrency(object.getPrice()));
             binding.titleTxt.setText(object.getTitle());
             binding.descriptionTxt.setText(object.getDescription());
             binding.ratingTxt.setText(object.getStar() + " Rating");
             binding.ratingBar.setRating((float) object.getStar());
-            binding.totalTxt.setText((num * object.getPrice())+ " VND");
+            binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
 
             binding.plusBtn.setOnClickListener(v -> {
                 num = num + 1;
                 Log.d(TAG, "Increased quantity: " + num);
                 binding.numTxt.setText(String.valueOf(num));
-                binding.totalTxt.setText((num * object.getPrice()) + " VND");
+                binding.totalTxt.setText(formatCurrency(num * object.getPrice()));
             });
 
             binding.minusBtn.setOnClickListener(v -> {
@@ -97,7 +99,7 @@
                     num = num - 1;
 
                     binding.numTxt.setText(String.valueOf(num));
-                    binding.totalTxt.setText( (num * object.getPrice()) + " VND");
+                    binding.totalTxt.setText(formatCurrency (num * object.getPrice()));
                 }
             });
 
@@ -118,7 +120,7 @@
             favoBtn.setOnClickListener(v -> {
                 if (object != null) {
                     toggleFavorite(object, favoBtn, isLiked, DetailActivity.this, newIsLiked -> {
-                        isLiked = newIsLiked; // Cập nhật trạng thái
+                        isLiked = newIsLiked;
                     });
                 }
             });
