@@ -1,5 +1,8 @@
 package com.example.appfood.Adapter;
 
+import static com.example.appfood.Utils.Utils.formatCurrency;
+
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,15 +76,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         Order order = orderList.get(position);
 
         // Set data to TextViews
-        holder.orderIdTxt.setText("Order Code: " + order.getOrderId());
-        holder.orderTimeTxt.setText("Order Date: " + dateFormat.format(new Date(order.getOrderTime())));
-        holder.foodListTxt.setText("Items: " + getFoodListString(order.getFoodList()));
-        holder.finalTotalTxt.setText("Total: " + String.format("%.0f", order.getFinalTotal()) + " VND");
-        holder.addressTxt.setText("Address: " + (order.getAddress() != null ? order.getAddress() : "Not available"));
-
+        holder.orderIdTxt.setText(MessageFormat.format("Order Code: {0}", order.getOrderId()));
+        holder.orderTimeTxt.setText(MessageFormat.format("Order Date: {0}", dateFormat.format(new Date(order.getOrderTime()))));
+        holder.foodListTxt.setText(MessageFormat.format("Items: {0}", getFoodListString(order.getFoodList())));
+        holder.finalTotalTxt.setText(MessageFormat.format("Total: {0} VND", String.format("%.0f", order.getFinalTotal())));
+        holder.addressTxt.setText(MessageFormat.format("Address: {0}", order.getAddress() != null ? order.getAddress() : "Not available"));
+        holder.paymentMethodTxt.setText(MessageFormat.format("Payment method: {0}", order.getPaymentMethod() != null ? order.getPaymentMethod() : "Not available"));
         // Set status and color
         String status = order.getStatus() != null ? order.getStatus() : "Undefined";
-        holder.statusTxt.setText("Status: " + status);
+        holder.statusTxt.setText(MessageFormat.format("Status: {0}", status));
         if ("Canceled".equalsIgnoreCase(status)) {
             holder.statusTxt.setTextColor(ContextCompat.getColor(context, R.color.red));
         } else if ("Completed".equalsIgnoreCase(status)) {
@@ -96,13 +101,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             for (Foods food : order.getFoodList()) {
                 if (food != null && food.getImagePath() != null && !food.getImagePath().isEmpty()) {
                     selectedFood = food;
-                    break; // Lấy mục đầu tiên có ImagePath hợp lệ
+                    break;
                 }
             }
 
             if (selectedFood != null) {
                 Log.d(TAG, "Order: " + order.getOrderId() + ", Selected Food: " + selectedFood.getTitle() +
-                        ", ImagePath: " + (selectedFood.getImagePath() != null ? selectedFood.getImagePath() : "null"));
+                        ", ImagePath: " + (selectedFood.getImagePath() != null ?
+                        selectedFood.getImagePath() : "null"));
                 try {
                     if (selectedFood.getImagePath() != null && !selectedFood.getImagePath().isEmpty()) {
                         Glide.with(context)
@@ -134,10 +140,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         holder.receivedButton.setVisibility(View.GONE);
 
         if (timeDiffMinutes < 1) {
-            if ("COD - Pending".equalsIgnoreCase(status) || ("Paid via QR".equalsIgnoreCase(status) )) {
+            if ("Waiting".equalsIgnoreCase(order.getStatus()) ) {
                 holder.cancelButton.setVisibility(View.VISIBLE);
             }
-        } else if ("COD - Pending".equalsIgnoreCase(status) || ("Paid via QR".equalsIgnoreCase(status) )) {
+        } else if ("Waiting".equalsIgnoreCase(order.getStatus())) {
             holder.receivedButton.setVisibility(View.VISIBLE);
         }
 
@@ -180,6 +186,31 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                         Toast.makeText(context, "Error marking order as completed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
+
+        holder.foodsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Foods> foodList = order.getFoodList();
+                if (foodList == null || foodList.isEmpty()) {
+                    Toast.makeText(context, "Không có món ăn nào trong đơn hàng.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_food_list, null);
+                RecyclerView recyclerView = dialogView.findViewById(R.id.recyclerViewFood);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                recyclerView.setAdapter(new FoodOrderListAdapter( foodList, context));
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Danh sách món ăn")
+                        .setView(dialogView)
+                        .setPositiveButton("Đóng", null)
+                        .show();
+            }
+        });
+
+
+
     }
 
     @Override
@@ -189,8 +220,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView foodImage;
-        TextView orderIdTxt, orderTimeTxt, foodListTxt, finalTotalTxt, statusTxt, addressTxt;
-        Button cancelButton, receivedButton;
+        TextView orderIdTxt, orderTimeTxt, foodListTxt, finalTotalTxt, statusTxt, addressTxt, paymentMethodTxt;
+        Button cancelButton, receivedButton, foodsButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -203,6 +234,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             addressTxt = itemView.findViewById(R.id.addressTxt);
             cancelButton = itemView.findViewById(R.id.cancelButton);
             receivedButton = itemView.findViewById(R.id.receivedButton);
+            foodsButton = itemView.findViewById(R.id.Foodsbutton);
+            paymentMethodTxt = itemView.findViewById(R.id.paymentMethodTxt);
         }
     }
 
@@ -211,9 +244,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         StringBuilder sb = new StringBuilder();
         for (Foods food : foodList) {
             sb.append(food.getTitle()).append(" (x").append(food.getNumberInCart())
-                    .append(", ").append(String.format("%.0f", food.getPrice()))
-                    .append(" VND), ");
+                    .append(", ").append(formatCurrency(food.getPrice())).append(", ");
         }
-        return sb.substring(0, sb.length() - 2); // Remove trailing comma
+        return sb.substring(0, sb.length() - 2);
     }
 }

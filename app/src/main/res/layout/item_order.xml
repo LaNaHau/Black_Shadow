@@ -1,51 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     android:layout_marginBottom="8dp"
-    android:background="@drawable/grey_background">
+    android:background="@drawable/grey_background"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/foodImage"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:contentDescription="Food image"
         android:scaleType="centerCrop"
         android:src="@drawable/history_order"
-        android:contentDescription="Food image"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/orderIdTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="Order Code: #123"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/foodImage" />
+        app:layout_constraintStart_toEndOf="@id/foodImage"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/orderTimeTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Order Date: 18-06-2025 21:31"
-        android:textSize="14sp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/orderIdTxt"
-        app:layout_constraintStart_toEndOf="@id/foodImage" />
+        android:text="Order Date: 18-06-2025 21:31"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/foodImage"
+        app:layout_constraintTop_toBottomOf="@id/orderIdTxt" />
 
     <TextView
         android:id="@+id/foodListTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Items: Pizza (x2, 50.000 VND), Burger (x1, 40.000 VND)"
+        android:text="Foods: Pizza (x2, 50.000 VND), Burger (x1, 40.000 VND)"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -56,59 +58,82 @@
         android:id="@+id/finalTotalTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Total: 150.000 VND"
         android:textSize="14dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/foodListTxt"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/foodListTxt" />
 
     <TextView
         android:id="@+id/statusTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Status: Completed"
         android:textSize="14dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/finalTotalTxt"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/paymentMethodTxt"
+        app:layout_constraintTop_toBottomOf="@+id/paymentMethodTxt" />
 
     <TextView
         android:id="@+id/addressTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Address: 123 ABC Street, HCM"
         android:textSize="14dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/statusTxt"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/finalTotalTxt" />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:textSize="14sp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/red"
+        android:text="Cancel"
         android:textColor="@color/white"
+        android:textSize="14sp"
         android:visibility="gone"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/addressTxt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/paymentMethodTxt"
+        app:layout_constraintTop_toBottomOf="@+id/statusTxt" />
 
     <Button
         android:id="@+id/receivedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Received"
-        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/colorPrimary"
+        android:text="Received"
         android:textColor="@color/white"
+        android:textSize="14sp"
         android:visibility="gone"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/addressTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.623"
+        app:layout_constraintStart_toEndOf="@+id/paymentMethodTxt"
+        app:layout_constraintTop_toBottomOf="@+id/statusTxt" />
+
+    <TextView
+        android:id="@+id/paymentMethodTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Payment method: COD - Pending"
+        app:layout_constraintStart_toStartOf="@+id/addressTxt"
+        app:layout_constraintTop_toBottomOf="@+id/addressTxt" />
+
+    <Button
+        android:id="@+id/Foodsbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Food List"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/paymentMethodTxt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/statusTxt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

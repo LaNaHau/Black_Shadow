@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.appfood.Activities.DetailActivity;
 import com.example.appfood.Domain.Foods;
 import com.example.appfood.R;
+import com.example.appfood.Utils.Utils;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ public class FoodLisAdapter extends RecyclerView.Adapter<FoodLisAdapter.viewhole
 
             holder.titleTxt.setText(item.getTitle());
             holder.timeTxt.setText(item.getTimeValue() + " min");
-            holder.priceTxt.setText( String.format("%.0f", item.getPrice()) + " VND");
+            holder.priceTxt.setText(Utils.formatCurrency(item.getPrice()));
             holder.rateTxt.setText(String.valueOf(item.getStar()));
 
             Log.d(TAG, "Binding item: " + item.getTitle() + " | Price: " + item.getPrice());

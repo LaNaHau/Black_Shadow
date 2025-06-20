@@ -97,6 +97,7 @@ public class OrderListActivity extends BaseActivity {
                             String phone = orderSnapshot.child("phone").getValue(String.class);
                             String address = orderSnapshot.child("address").getValue(String.class);
                             String status = orderSnapshot.child("status").getValue(String.class);
+                            String paymentMethod = orderSnapshot.child("paymentMethod").getValue(String.class);
 
                             double itemTotal = getDoubleValue(orderSnapshot, "itemTotal");
                             double tax = getDoubleValue(orderSnapshot, "tax");
@@ -112,6 +113,7 @@ public class OrderListActivity extends BaseActivity {
                             for (DataSnapshot foodSnapshot : foodListSnapshot.getChildren()) {
                                 Foods food = foodSnapshot.getValue(Foods.class);
                                 if (food != null) {
+
                                     foodList.add(food);
                                 }
                             }
@@ -120,6 +122,7 @@ public class OrderListActivity extends BaseActivity {
                                     itemTotal, tax, deliveryFee, totalAmount, orderTime, status,
                                     paymentConfirmTime, finalTotal);
 
+                            order.setPaymentMethod(paymentMethod);
                             orderList.add(order);
                             Log.d(TAG, "Loaded order: " + orderId + ", Status: " + status);
 

@@ -48,12 +48,6 @@ public class PaymentMethodActivity extends BaseActivity {
         Voucher discountVoucher = (Voucher) getIntent().getSerializableExtra("selected_discount_voucher");
         Voucher freeshipVoucher = (Voucher) getIntent().getSerializableExtra("selected_freeship_voucher");
 
-        if (discountVoucher != null) {
-            // Hiển thị: ví dụ
-        }
-        if (freeshipVoucher != null) {
-        }
-
         if (order == null) {
             showToast("Không nhận được thông tin đơn hàng");
             finish();
@@ -80,7 +74,8 @@ public class PaymentMethodActivity extends BaseActivity {
 
         binding.btnConfirm.setOnClickListener(v -> {
             if (binding.radioCOD.isChecked()) {
-                order.setStatus("COD - Pending");
+                order.setPaymentMethod("COD - Pending");
+                order.setStatus("Waiting");
                 saveOrderToFirebase(order, true);
                 showToast("Đã chọn thanh toán khi nhận hàng");
             } else if (binding.radioQR.isChecked()) {
@@ -100,8 +95,9 @@ public class PaymentMethodActivity extends BaseActivity {
                 return;
             }
 
-            order.setStatus("Paid via QR");
+            order.setPaymentMethod("Paid via QR");
             order.setPaymentConfirmTime(System.currentTimeMillis());
+            order.setStatus("Waiting");
             saveOrderToFirebase(order, true);
             showToast("Đã xác nhận thanh toán bằng QR");
         });

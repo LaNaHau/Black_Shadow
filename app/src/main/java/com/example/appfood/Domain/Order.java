@@ -19,6 +19,15 @@ public class Order implements Serializable {
     private String status;
     private long paymentConfirmTime;
     private double finalTotal;
+    private String paymentMethod;
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 
     public Order() {}
     public Order(String orderId, String userId, String userName, String phone, String address,
