@@ -1,1 +1,1 @@
-Mobile App Group 7
+A modern Android food delivery application developed as a personal/academic project to simulate a real-world ordering experience. The app enables users to browse meals, view detailed information, add items to a shopping cart, apply discount vouchers, and place an order – all with a clean and responsive UI.
